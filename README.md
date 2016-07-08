@@ -38,7 +38,7 @@ The most important functions are **DAISobs_likelihood_iid**, **DAIScali_hetero_m
 
 To fit the DAIS model using MCMC, simply open a terminal and run **DAIScali_hetero_model_iid_mcmc** (Note, this runs ~24hrs). Then source **DAIScali_hetero_model_iid_mcmcmat** and **MCMC_plots** to generate projections and plots. (Specific details can be found in the README.txt file.
 
-To run the Latin hypercube pre-calibration, simply open a terminal and source **DAIS_precali_LHS** followed by **LHS_plots** to generate projections and plots. (Note, this runs ~2hrs; specific details can be found in the README.txt file.
+To run the Latin hypercube pre-calibration, simply open a terminal and source **DAIS_precali_LHS** followed by **LHS_plots** to generate projections and plots. (Note, this runs ~2hrs; specific details can be found in the README.txt file).
 
 ##Contact
 Kelsey Ruckert: <klr324@psu.edu>  
