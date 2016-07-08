@@ -46,7 +46,7 @@ otherwise the scripts will not locate the files/scripts needed to run.
 |  3. Type: cd DAIS_matlab
 |  4. Type: matlab -nodisplay -nosplash < DAIScali_hetero_model_iid_mcmc.m      
 |  5. Type: cd..
-|  6. Type: Rscript DAIS_convergence_plotsR.R (to check for convergence)
+|  6. Type: Rscript DAIS_convergence_plotsR.R (to check for convergence also run DAIScali_hetero_model_iid_mcmc1780.m)
 |  7. Type: Rscript DAIScali_hetero_model_iid_mcmcmat.R
 |  8. Type: Rscript MCMC_plots.R
 |
