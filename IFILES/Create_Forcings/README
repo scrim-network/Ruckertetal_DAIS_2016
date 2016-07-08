@@ -1,0 +1,50 @@
+  Codes generating temperature and sea-level forcings from 1850 to 2300 for Ruckert et al. 2016
+
+  Reference:
+  Ruckert et al. (in prep.)
+
+  This program is distributed in the hope that it will be useful,
+  but WITH NO WARRANTY (NEITHER EXPLICITNOR IMPLICIT). We are not liable
+  for the behavior of these codes in your own application. You are free
+  to share this code so long as the authors(s) and version history remain
+  intact.
+
+    Varada Vaidya, vvv3@psu.edu    (TA & TO)
+    Robert Nicholas, ren10@psu.edu (TA & TO)
+    Kelsey Ruckert, klr324@psu.edu (SLR & GSL)
+
+
+| Forcings (annual timestep)
+ ===================================================================                                                          
+|  TA:  Antarctic temperature reduced to sea-level                                                      
+|  TO:  Volume averaged (200-800m) high latitude (52-70) subsurface ocean temperature                              
+|  SL:  Reconstructed sea-level                            
+|  GSL: Rate of change of sea-level                            
+
+
+| Please note that some data for generating TO is missing due to the size of the files.
+|  Please contact Robert Nicholas for access to the following files:
+ =================================================================================================
+|  1. 3D_ocean_variables_giant_merged_files/thetao.mon.CNRM-CM5.historical.r1i1p1.185001-200512.nc
+|  2. 3D_ocean_variables_giant_merged_files/thetao.mon.CNRM-CM5.rcp85.r1i1p1.200601-230012.nc
+ =================================================================================================
+
+
+| Notes on generating the data:
+|  anomalies are with respect to the 1961-1990 mean
+|  TA and TO scripts need to be modified to call data from user specified directories
+ =============================================================================
+|  1. SL & GSL: source “future_seal-level_DAIS.R” 
+|  2. TA: source “calculate_Antarctica_mean_temperature_anomalies_adjusted_to_sea_level.sh”
+|	2a. Average the monthly values to estimate yearly celsius anomalies
+|	2b. Add -18 to the yearly anomalies to adjust to present day 
+|  3. TO: source “calculate_volume_averaged_ocean_potential_temperature_around_Antarctica.sh”
+|	2a. Add 0.72 to the yearly anomalies to adjust to present day
+|	2b. Add 0.055 adjust to line up with Shaffer 2014 
+ =============================================================================
+
+Credits:
+
+Shaffer G (2014) Formulation, calibration and validation of the DAIS model (version 1), a simple Antarctic ice sheet modelsensitive to variations of sea level and ocean subsurface temperature. Geosci Model Dev 7(4):1803–1818. doi:10.5194/gmd-7-1803-2014.
+
+
