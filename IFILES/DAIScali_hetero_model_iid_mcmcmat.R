@@ -72,7 +72,9 @@ estimate.SLE.rate = abs(-71/360)/1000
 time.years = 2002-1992
 mid.cum.SLE_2002 = estimate.SLE.rate*time.years
 
-estimate.SLE.error = abs(-53/360)/1000 #1- sigma error
+# Accumulate the error from the trend; errors are added up as "sigma" each year in a quadrature,
+# like adding variances.
+estimate.SLE.error = sqrt(time.years)*abs(-53/360)/1000 #1- sigma error
 SE2_2002 = estimate.SLE.error*2 #2-sigma error
 
 positive_2SE = mid.cum.SLE_2002 + SE2_2002 # Add the 2 standard error to the mean value
@@ -102,8 +104,6 @@ sigma = sd(resid)^2 #calculate the variance (sigma^2)
 bound.lower = IP - (IP*0.5)    ; bound.upper = IP + (IP*0.5)
 bound.lower[1:2] = c(1/2, 0)   ; bound.upper[1:2] = c(17/4, 1) #Set bounds for gamma and alpha
 bound.lower[10:11] = c(725, 0.00045)   ; bound.upper[10:11] = c(825, 0.00075) #Set bounds for bo and s
-
-#bound.lower[12] = 0 ; bound.upper[12] = 1 # Prior uniform range for sigma (the variance)
 
 # step 2 define number of model parameters
 model.p=11
