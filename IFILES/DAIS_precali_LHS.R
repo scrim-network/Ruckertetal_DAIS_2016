@@ -53,8 +53,6 @@ bound.lower = IP - (IP*0.5)    ; bound.upper = IP + (IP*0.5)
 bound.lower[1:2] = c(1/2, 0)   ; bound.upper[1:2] = c(17/4, 1) #Set bounds for gamma and alpha
 bound.lower[10:11] = c(725, 0.00045)   ; bound.upper[10:11] = c(825, 0.00075) #Set bounds for bo and s
 
-#bound.lower[12] = 0 ; bound.upper[12] = 1 # Prior uniform range for sigma (the variance)
-
 #Source the function with the standards and the new parameters to
 #get the best estimated AIS melt SLE:
 standards = c(Tice,eps1, del, eps2, TOo, Volo, Roa, R)
@@ -75,7 +73,9 @@ estimate.SLE.rate = abs(-71/360)/1000
 time.years = 2002-1992
 mid.cum.SLE_2002 = estimate.SLE.rate*time.years
 
-estimate.SLE.error = abs(-53/360)/1000 #1- sigma error
+# Accumulate the error from the trend; errors are added up as "sigma" each year in a quadrature,
+# like adding variances.
+estimate.SLE.error = sqrt(time.years)*abs(-53/360)/1000 #1- sigma error
 SE2_2002 = estimate.SLE.error*2 #2-sigma error
 
 positive_2SE = mid.cum.SLE_2002 + SE2_2002 # Add the 2 standard error to the mean value
@@ -172,14 +172,6 @@ standards = c(Tice, eps1, del, eps2, TOo, Volo, Roa, R)
 for(i in 1:sample_length) {
   lhs.dais.models[i,] = iceflux(par[i,], project.forcings, standards)
 }
-
-# ### Superimpose the bias onto the model
-# ### True world = model + bias
-# bias = Parameters[,12]
-# lhs.dais.mpbias = mat.or.vec(sample_length, enddate)
-# for(i in 1:sample_length){
-#   lhs.dais.mpbias[i,] = lhs.dais.models[i,] + bias[i]^2
-# }
 
 ### Superimpose the bias onto the model
 ### True world = model + bias
