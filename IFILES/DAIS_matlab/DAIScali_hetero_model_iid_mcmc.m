@@ -86,7 +86,9 @@ estimate_SLE_rate = abs(-71/360)/1000;
 time_years = 2002-1992;
 mid_cum_SLE_2002 = estimate_SLE_rate*time_years;
 
-estimate_SLE_error = abs(-53/360)/1000; %1- sigma error
+% Accumulate the error from the trend; errors are added up as "sigma" each year in a quadrature,
+% like adding variances.
+estimate_SLE_error = sqrt(time_years)*abs(-53/360)/1000; %1- sigma error
 SE2_2002 = estimate_SLE_error*2; %2-sigma error
 
 positive_2SE = mid_cum_SLE_2002 + SE2_2002; % Add the 2 standard error to the mean value
@@ -115,8 +117,6 @@ sigma = std(resid)^2; %calculate the variance (sigma^2);
 bound_lower = IP - (IP*0.5)    ; bound_upper = IP + (IP*0.5);
 bound_lower(1:2) = [1/2, 0]   ; bound_upper(1:2) = [17/4, 1]; %Set bounds for gamma and alpha
 bound_lower(10:11) = [725, 0.00045]   ; bound_upper(10:11) = [825, 0.00075]; %Set bounds for bo and s
-
-%bound_lower(12) = 0 ; bound_upper(12) = 1; % Prior uniform range for sigma (the variance)
 
 %Shaffer [2014] best guess parameters
 p = [IP, sigma];
