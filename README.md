@@ -1,4 +1,4 @@
-#Sea-level contribution from the Antarctic Ice Sheet code for Ruckert et al. (in review)
+#Sea-level contribution from the Antarctic Ice Sheet code for Ruckert et al. (Accepted)
 
 README file last updated by Kelsey Ruckert, klr324-at-psu-dot-edu, Wed Dec 21 14:19:51 EST 2016
 
@@ -6,7 +6,7 @@ README file last updated by Kelsey Ruckert, klr324-at-psu-dot-edu, Wed Dec 21 14
 
 This code is intended to accompany the results of
 
->Ruckert, KL, Shaffer, G, Pollard, D, Guan, Y, Wong, TE, Forest, CE and Keller, K. Assessing the impact of retreat mechanisms in a simple Antarctic ice sheet model using Bayesian calibration, (in review).
+>Ruckert, KL, Shaffer, G, Pollard, D, Guan, Y, Wong, TE, Forest, CE and Keller, K. Assessing the impact of retreat mechanisms in a simple Antarctic ice sheet model using Bayesian calibration, (Accepted).
 
 Please cite that paper and the Shaffer (2014) study when using any results generated with this code.
 

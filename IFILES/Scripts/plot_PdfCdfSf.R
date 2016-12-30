@@ -37,10 +37,11 @@ parameter.pdfs <- function(year.parameter) {
   po.pdf = density(year.parameter[,5]); kap.pdf = density(year.parameter[,6])
   fo.pdf = density(year.parameter[,7]); ho.pdf = density(year.parameter[,8])
   co.pdf = density(year.parameter[,9]); bo.pdf = density(year.parameter[,10])
-  s.pdf = density(year.parameter[,11]); sigma.pdf = density(year.parameter[,12])
+  s.pdf = density(year.parameter[,11]); var.paleo.pdf = density(year.parameter[,12])
+  var.inst.pdf = density(year.parameter[,13])
   
-  return(list(gam = gam.pdf, alp = alp.pdf, mu = mu.pdf, eta = eta.pdf, po = po.pdf,
-              kap = kap.pdf, fo = fo.pdf, ho = ho.pdf, co = co.pdf, bo = bo.pdf, s = s.pdf, sigma = sigma.pdf))
+  return(list(gam = gam.pdf, alp = alp.pdf, mu = mu.pdf, nu = eta.pdf, p0 = po.pdf,
+              kap = kap.pdf, f0 = fo.pdf, h0 = ho.pdf, c = co.pdf, b0 = bo.pdf, slope = s.pdf, var.paleo = var.paleo.pdf, var.inst = var.inst.pdf))
 }
 
 # Function to find SLE values in certain years
