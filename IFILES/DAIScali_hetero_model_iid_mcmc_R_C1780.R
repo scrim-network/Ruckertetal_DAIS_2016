@@ -1,6 +1,6 @@
 #################################################################################
 #
-#  - file = "DAIScali_hetero_model_iid_mcmcRversion.R"
+#  - file = "DAIScali_hetero_model_iid_mcmc_R_C1780.R"
 #  - Code written: August 2015, updated March 2016
 #  - Author: Kelsey Ruckert (klr324@psu.edu)
 #
@@ -23,11 +23,6 @@ library(mcmc)
 
 #Set the seed.
 set.seed(1780)
-
-## Run multiple times with different seeds to check for convergence &
-## robustness of the results:
-# set.seed(1234)
-# set.seed(1)
 
 # Read in hindcast/ forcing data, read in standard values, and read in AIS dates both specific and ranges so there is no use of magic numbers.
 source("Data/DAIS_data_C.R")
@@ -142,7 +137,6 @@ source("Scripts/DAISobs_likelihood_iid.R")
 # Optimize the likelihood function to estimate initial starting values.
 p = c(IP, paleo_variance, inst_variance) # Shaffer [2014] Case #4 parameters
 p0 = c(2.1, 0.29, 8, 0.015, 0.4, 0.04, 1.0, 1450, 90, 770, 0.0005, 0.6, (5.5e-5)^2) # Random guesses
-#p0 = c(2.1, 0.29, 8, 0.015, 0.4, 0.04, 1.0, 1450, 90, 770, 0.0005, 0.6, 0.055)
 p0 = optim(p0, function(p) - log.post(p))$par
 print(round(p0,4))
 
@@ -151,8 +145,6 @@ print(round(p0,4))
 #step = c(0.05, 0.01, 0.15, 0.035, 0.1, 0.01, 0.1, 50, 10, 30, 0.0005, 0.1)/5
 #step = c(0.1, 0.015, 0.2, 0.025, 0.1, 0.01, 0.1, 50, 10, 20, 0.0005, 0.15)/5
 NI = 8E5
-#NI = 1E6
-#NI = 4E6
 
 # Run MCMC calibration.
 #DAIS_mcmc_output1780 = metrop(log.post, p0, nbatch=NI, scale=step)
@@ -162,6 +154,7 @@ NI = 8E5
 #acceptrate = DAIS_mcmc_output1780$accept * 100
 #cat("Accept rate =", acceptrate, "%\n")
 
+############################## RUN ADAPTIVE MCMC #######################################
 library(adaptMCMC)
 
 # Set optimal acceptance rate as # parameters->infinity (Gelman et al, 1996; Roberts et al, 1997)
@@ -183,165 +176,6 @@ DAIS_chains1780 = DAIS_mcmc_output1780$samples
 ## Save workspace image - you do not want to re-simulate all those!
 save.image(file = "DAIS_calib_MCMC_C1780_relative__8e5.RData")
 
-############################## RUN ADAPTIVE MCMC #######################################
-# # NOT FULLY CODED YET
-# # load robust adaptive Metropolis
-# library(adaptMCMC)
-#
-# # Set optimal acceptance rate as # parameters->infinity (Gelman et al, 1996; Roberts et al, 1997)
-# accept.mcmc = 0.234
-#
-# # Set number of iterations, burnin, and rate of adaptation (between 0.5 and 1, lower is faster adaptation)
-# niter.mcmc = 5E4											# number of iterations for MCMC
-# gamma.mcmc = 0.5											#
-# burnin = 0.01*NI
-#
-# # Specify when to stop adapting (niter*1 => don't stop) and step size
-# # stopadapt.mcmc = round(niter.mcmc*1.0)
-# # step.mcmc = (bound.upper-bound.lower)*.05
-#
-# ## Actually run the calibration.
-# amcmc.out1 = MCMC(log.post, niter.mcmc, parameters0, scale=step.mcmc, adapt=TRUE, acc.rate=accept.mcmc,gamma=gamma.mcmc, list=TRUE,
-#                   n.start=round(0.01*niter.mcmc),parnames.in=parnames, bound.lower.in=bound.lower, bound.upper.in=bound.upper,
-#                                 obs.in=obs.targets  , obs.err.in=obs.err        , obs.step.in=obs.years     ,
-#                                 alpha.var=alpha.var , beta.var=beta.var         ,
-#                                 slope.Ta2Tg.in=slope.Ta2Tg , intercept.Ta2Tg.in=intercept.Ta2Tg ,
-#                                 Tg.in=Tg.recon      , SL.in=SL )
-#
-# DAIS_chains = amcmc.out1$samples
-#
-########################## Analysis of the mean of MCMC chains produced  #################
-# Identify the burn-in period and subtract it from the chains.
-#burnin = seq(1, 0.01*NI, 1) # 1% burnin
-#DAIS_chains_burnin <- DAIS_chains[-burnin,]
+########################################## END ########################################
 
-# Find mean of the estimated parameters.
-#mean.parameters = c(mean(DAIS_chains_burnin[,1]), mean(DAIS_chains_burnin[,2]), mean(DAIS_chains_burnin[,3]), mean(DAIS_chains_burnin[,4]),
-#                  mean(DAIS_chains_burnin[,5]), mean(DAIS_chains_burnin[,6]), mean(DAIS_chains_burnin[,7]), mean(DAIS_chains_burnin[,8]),
-#                  mean(DAIS_chains_burnin[,9]), mean(DAIS_chains_burnin[,10]), mean(DAIS_chains_burnin[,11]), mean(DAIS_chains_burnin[,12]))
-#print(mean.parameters)
-
-# Estimate mean bias:
-#bias.mean = sqrt(mean.parameters[12])
-
-# Estimate model hindcast from parameter means.
-#mean.hind.simulation = iceflux(mean.parameters[1:11], hindcast.forcings, standards)
-#mean.hind.anomaly = mean.hind.simulation - mean(mean.hind.simulation[SL.1961_1990])
-#mean.hindcast = mean.hind.anomaly + rnorm(length(mean.hind.simulation), mean=0, sd=bias.mean)
-
-# Estimate model projection from parameter means.
-#mean.proj.simulation = iceflux(mean.parameters[1:11], project.forcings, standards)
-#mean.proj.anomaly = mean.proj.simulation - mean(mean.proj.simulation[SL.1961_1990])
-#mean.projection = mean.proj.anomaly + rnorm(length(mean.proj.anomaly), mean=0, sd=bias.mean)
-
-############################## ANALYZE CHAINS #######################################
-# Load function to calculate pdfs of each DAIS parameter 'parameter.pdfs'
-#source('Scripts/plot_PdfCdfSf.R')
-
-# Find the probability density function for each of the estimated parameters
-#dais_parameter_PDFs = parameter.pdfs(DAIS_chains_burnin)
-
-# Thin the chain to a subset; ~2,500 is sufficient.
-#subset_N = NI/5000
-#R_subset = round(subset_N,0)
-#sub_chain = DAIS_chains_burnin[seq(1, length(DAIS_chains_burnin[,1]), R_subset),]
-#subset_length = length(sub_chain[,1])
-
-# Check for simularities between full chain and the subset.
-#par(mfrow=c(4,3))
-#for(i in 1:12){
-#  plot(density(DAIS_chains_burnin[ ,i]), type="l",
-#       xlab=paste('Parameter =',' ', parnames[i], sep=''), ylab="PDF", main="")
-#  lines(density(sub_chain[ ,i]), col="red")
-#}
-
-# Set up parameter matrix.
-#par.mcmc = mat.or.vec(subset_length, 11)
-#for(i in 1:subset_length) {
-#  par.mcmc[i,1] = sub_chain[i,1]
-#  par.mcmc[i,2] = sub_chain[i,2]
-#  par.mcmc[i,3] = sub_chain[i,3]
-#  par.mcmc[i,4] = sub_chain[i,4]
-#  par.mcmc[i,5] = sub_chain[i,5]
-#  par.mcmc[i,6] = sub_chain[i,6]
-#  par.mcmc[i,7] = sub_chain[i,7]
-#  par.mcmc[i,8] = sub_chain[i,8]
-#  par.mcmc[i,9] = sub_chain[i,9]
-#  par.mcmc[i,10] = sub_chain[i,10]
-#  par.mcmc[i,11] = sub_chain[i,11]
-#}
-
-################### HINDCAST AIS CONTRIBUTIONS ##########################
-# enddate = 240010
-
-# # Loop over the physical model to generate a distribution of model simulations.
-# hindcast_sim = mat.or.vec(subset_length, enddate)
-# for(i in 1:subset_length) {
-#   hindcast_sims[i,] = iceflux(par.mcmc[i,], hindcast.forcings, standards)
-# }
-#
-# # Estimate model simulation anomalies to the mean 1961-1990 period.
-# dais_hindcast_anomaly = mat.or.vec(subset_length, enddate)
-# for(i in 1:subset_length){
-#     dais_hindcast_anomaly[i,] = hindcast_sims[i,] - mean(hindcast_sims[i,SL.1961_1990])
-# }
-# 
-# # Estimate bias from the variance
-# bias.mcmc = sqrt(sub_chain[,12]) # standard deviation
-#
-# # Estimate the hindcasts: add the residuals (bias) onto the model simulations. Equations 1 & 2
-# # True world = model + bias + error
-# hind.mcmc.1961_1990 = mat.or.vec(subset_length, enddate)
-# for(i in 1:subset_length){
-#   hind.mcmc.1961_1990[i,] = dais_hindcast_anomaly[i,] + rnorm(enddate, mean = 0, sd = bias.mcmc[i])
-# }
-################### PROJECT AIS CONTRIBUTIONS ##########################
-#enddate = 240300
-
-# Loop over the physical model to generate a distribution of model simulations.
-#projection_sims = mat.or.vec(subset_length, enddate)
-#for(i in 1:subset_length) {
-#  projection_sims[i,] = iceflux(par.mcmc[i,], project.forcings, standards)
-#}
-
-# # Estimate model simulation anomalies to the mean 1961-1990 period.
-#proj.mcmc.anomaly = mat.or.vec(subset_length, enddate)
-#for(i in 1:subset_length){
-#  proj.mcmc.anomaly[i,] = projection_sims[i,] - mean(projection_sims[i,SL.1961_1990])
-#}
-
-# Estimate bias from the variance
-#bias.mcmc = sqrt(sub_chain[,12]) # standard deviation
-
-# # Estimate the projections: add the residuals (bias) onto the model simulations. Equations 1 & 2
-# # True world = model + bias + error
-#proj.mcmc.1961_1990 = mat.or.vec(subset_length, enddate)
-#for(i in 1:subset_length){
-#  proj.mcmc.1961_1990[i,] = proj.mcmc.anomaly[i,] + rnorm(enddate, mean = 0, sd = bias.mcmc[i])
-#}
-
-#--------------------- Estimate PDFs, CDFs, and SFs in certain years --------------------------
-# Function to find SLE values in certain years 'fn.prob.proj'
-#year.pcs = c(120000, 220000, 234000, 240002, 240050, 240100, 240300)
-
-#mcmc.prob_proj <- fn.prob.proj(proj.mcmc.1961_1990, year.pcs, subset_length, un.constr=T)
-
-# Calculate the pdf, cdf, and sf of AIS melt estimates in:
-#LIG.sf.mcmc <- plot.sf(mcmc.prob_proj[,1], make.plot=F) # 120,000 BP (Last interglacial)
-#LGM.sf.mcmc <- plot.sf(mcmc.prob_proj[,2], make.plot=F) # 20,000 BP (Last glacial maximum)
-#MH.sf.mcmc <- plot.sf(mcmc.prob_proj[,3], make.plot=F) # 6,000 BP (Mid-holocene)
-#sf.2002.mcmc <- plot.sf(mcmc.prob_proj[,4], make.plot=F) # 2002 (Observed trend from 1993-2011)
-#sf.2050.mcmc <- plot.sf(mcmc.prob_proj[,5], make.plot=F) # 2050
-#sf.2100.mcmc <- plot.sf(mcmc.prob_proj[,6], make.plot=F) # 2100
-#sf.2300.mcmc <- plot.sf(mcmc.prob_proj[,7], make.plot=F) # 2300
-
-#Find out parameter relationships; set up a matrix
-#d.pos_parameters = sub_chain
-#colnames(d.pos_parameters, do.NULL = FALSE)
-#colnames(d.pos_parameters) = c("gamma", "alpha", "mu", "nu", "p0", "kappa", "f0", "h0", "c","b0", "slope", "sigma")
-
-#save.image(file = "Scratch/Workspace/DAIS_MCMC_R_C_calibration1780.RData")
-
-######################## For Further Analysis Plot graphes ######################
-#source("MCMC_plots.R")
 
