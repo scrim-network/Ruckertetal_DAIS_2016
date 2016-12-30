@@ -1,5 +1,5 @@
 #############################################################
-## -file = DAIS_data.R
+## -file = DAIS_data_C.R
 ## -Antarctic Ice Sheet (AIS) model
 #############################################################
 ## -Model can be found in Shaffer_GMDD_2014
@@ -18,39 +18,37 @@
 if (!exists('SL')) {
   date = seq(-239999,300,1) #240 Kyr BP to 2100AD at one year intervals of the forcings
   GSL = scan("Data/future_GSL.txt")   #Time rate of change of sea-level
-  TA = scan("Data/future_TA.txt")     #Antarctic temperature reduced to sea-level
-  TO = scan("Data/future_TO.txt")     #High latitude subsurface ocean temperature
+  Ta = scan("Data/future_TA.txt")     #Antarctic temperature reduced to sea-level
+  Toc = scan("Data/future_TO.txt")     #High latitude subsurface ocean temperature
   SL = scan("Data/future_SL.txt")     #Reconstructed sea-level
-#   SL=SL[1:240010]
-#   GSL=GSL[1:240010]
 }
 
 #Set model parameters at their standard values
-Tice = -1.8             #Freezing temperature of sea water
-Dsw = 1.03              #Density of sea water [g/cm^3]
-Dice = 0.917            #Density of ice water [g/cm^3]
-Drock = 4.0             #Density of rock [g/cm^3]
-bo = 775                #Height of bed at the center of the continent [m]
-s = 0.0006              #Slope of the bed
-fo = 1.2                #Constant of proportionality for ice speed [m/yr]
-ho = 1471               #Initial value for runoff line calculation [m]
-co = 95                  #Second value for runoff line calculation [m]
-Roa = 1.8636e6          #Steady state AIS radius for present day Ta and SL [m]
+Tf = -1.8             #Freezing temperature of sea water
+rho_w = 1030              #Density of sea water [g/cm^3]
+rho_i = 917            #Density of ice water [g/cm^3]
+rho_m = 4000             #Density of rock [g/cm^3]
+b0 = 775                #Height of bed at the center of the continent [m]
+slope = 0.0006              #Slope of the bed
+f0 = 1.2                #Constant of proportionality for ice speed [m/yr]
+h0 = 1471               #Initial value for runoff line calculation [m]
+c = 95                  #Second value for runoff line calculation [m]
+Rad0 = 1.8636e6          #Steady state AIS radius for present day Ta and SL [m]
 Volo = 2.4789e16        #Steady state AIS volume for present day Ta and SL [m^3]
-TOo = 0.72              #Present day high latitude ocean subsurface temperature [K]
+Toc_0 = 0.72              #Present day high latitude ocean subsurface temperature [K]
 
-del = Dsw/Dice
-eps1 = Dice/(Drock-Dice)
-eps2 = Dsw/(Drock-Dice)
+del = rho_w/rho_i
+eps1 = rho_i/(rho_m - rho_i)
+eps2 = rho_w/(rho_m - rho_i)
 
 #Initial condition for integration
-R = Roa
+R = Rad0
 
 #Setup AIS melt ranges and specific dates so there is no use of magic numbers
 #in the code
-last.interglacial = c(date[110000],date[120000],date[130000])
-last.glacialmax = c(date[219000],date[220000],date[221000])
-holocene = c(date[233800],date[234000],date[234200])
+last.interglacial = c(date[110000], date[120000], date[130000])
+last.glacialmax = c(date[219000], date[220000], date[221000])
+holocene = c(date[233800], date[234000], date[234200])
 SL.1961_1990 = 239961:239990
 kyrbp_25 = 220000
 kyrbp_6 = 234000
