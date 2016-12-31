@@ -24,7 +24,7 @@ This R code is intended to help users who wish to work with the sea-level projec
 ## Requirements
 ### Software
 These scripts are written to run in R (tested under R v3.2.1; https://www.r-project.org/) with some help from C. They also require mulitple packages including:  
->adaptMCMC 
+>adaptMCMC  
 coda  
 lhs  
 pscl  
