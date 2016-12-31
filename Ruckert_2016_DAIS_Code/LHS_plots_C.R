@@ -43,7 +43,6 @@ makeTransparent<- function(somecolor, alpha=100){
 #the previous ranges are in cm so divide by 100 to get meters
 pfeffer = c(12.8, 14.6, 61.9)/100 #Low2, low1, and high estimate in Pfeffer et al. 2008
 Bamber = c(-2, 13, 83)/100 # 5%, Median, 95% estimates in Bamber and Aspinall 2013
-# IPCC_AR5 = c(-15, 4, 23)/100 # 5%, Median, 95% estimates in IPCC AR5
 IPCC_AR5 = c(-6, 4, 12)/100 # 5%, Median, 95% estimates in IPCC AR5
 Little = c(-8, 2.4, 13.3)/100 # 5%, Median, 95% estimates in Little et al. 2013
 # Little_unweighted = c(-14.7, -1.1, 12.6)/100 # 5%, Median, 95% estimates in Little et al. 2013
@@ -96,7 +95,6 @@ print(paste('median rmse = ', rmse_median))
 ###################################### SUPPLEMENTARY FIGURES ############################################
 #------------------------------------- Supplementary Figure 3 -------------------------------------------
 
-#pdf(file="Figures/SuppFigures/suppFig4_dais_LHS.pdf", family="Helvetica",height=5.4, width=6.7,pointsize=11)
 png(file="Scratch/Figures/SuppFigures/S2_Fig_inst2.tif", family="Helvetica", width=text_column_width,
 height=single_panel_height*2, units="in",pointsize=12, res=300)
 par(mfrow=c(2,1),mgp=c(1.5,.5,0), mar=c(3.5,4,1,2)) # set figure dimensions
@@ -135,7 +133,6 @@ par(mgp=c(1.5,.5,0), mar=c(3.5, 3, 1, 2))
 plot(un.sf2100$pdf, main="",lwd=3, col="gray91", xlab="Projected AIS volume loss", sub= "in 2100 [SLE m]",
 ylab="Probability Density",
 xlim=c(-1.5,3.5), ylim=c(-5.5,14.5))#, yaxt="n") #ylim=c(-18,78)
-#xlim=c(-3,1.75), ylim=c(-3,10.5))#, yaxt="n") #ylim=c(-18,78)
 
 lines(LIG.sf2100$pdf, col=mypalette[3], lwd=2)
 lines(LGM.sf2100$pdf, col=mypalette[5], lwd=2)
@@ -208,11 +205,8 @@ dev.off()
 
 #------------------------------------- Supplementary Figure 2 -------------------------------------------
 # # LHS hindcasts & projection
-# width=1920, height=1080
 png(file="Scratch/Figures/SuppFigures/S1_Fig_inst2.tif", family="Helvetica", width=text_column_width, height=single_panel_height*2, units="in",pointsize=12, res=300)
 par(mfrow=c(3,2), mgp=c(1.5,.5,0), mar=c(4, 4, 2, 1))
-# jpeg(file="nSuppFig3_dais_mcmcLHS.jpeg", family="Helvetica", width=1590, height=1920, units="px", pointsize=40)
-# par(mfrow=c(3,2), mgp=c(1.5,.5,0),mar=c(4, 4, 3, 2))
 
 # Last interglacial 240 kyr Bp - 2010 AD
 plot(date[1:240010], AIS_melt-mean(AIS_melt[SL.1961_1990]), type="l", col="powderblue", lwd=1,
