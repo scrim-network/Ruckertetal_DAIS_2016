@@ -1,6 +1,6 @@
 #Sea-level contribution from the Antarctic Ice Sheet code for Ruckert et al. (Accepted)
 
-README file last updated by Kelsey Ruckert, klr324-at-psu-dot-edu, Wed Dec 21 14:19:51 EST 2016
+README file last updated by Kelsey Ruckert, klr324-at-psu-dot-edu, Sun Jan 1 2017. Please note that the codes will be cleaned up over the next week to help with user/code readability.
 
 ##Citation
 
