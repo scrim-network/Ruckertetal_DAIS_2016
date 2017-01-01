@@ -117,7 +117,7 @@ print(bound.upper)
 
 # var.paleo and var.inst has inverse gamma prior, so there is a lower bound at 0 but no upper bound
 parnames    = c('gamma','alpha','mu'  ,'nu'  ,'P0' ,'kappa','f0' ,'h0'  ,'c'  , 'b0','slope' ,'var.paleo', 'var.inst')
-bound.upper = c( 4.25 ,  1     , 13.05, 0.018,0.525,  0.06 , 1.8 ,2206.5, 142.5, 825 , 0.00075,    Inf,       Inf)
+bound.upper = c( 4.25 ,  1     , 13.05, 0.018,0.525,  0.06 , 1.8 ,2206.5, 142.5, 825 , 0.00075,    Inf,       0.0004)#Inf)
 bound.lower = c( 0.5  ,  0     , 4.35 , 0.006,0.175,  0.02 , 0.6 , 735.5,  47.5, 725 , 0.00045 ,     0,       0)
 
 # Optimize the parameters to find the best hindcast and projection (slow ~50 minutes on single CPU)
@@ -151,8 +151,8 @@ fn.LHS <- function(n_samples, x, y, bound.upper, bound.lower) {
   beta.paleo = 1
   #alpha.inst = 5.5
   #beta.inst = 0.25
-  alpha.inst = 5600
-  beta.inst = 1.8e-05
+  #alpha.inst = 5600
+  #beta.inst = 1.8e-05
   y[,1] <- qunif(x[,1], bound.lower[1], bound.upper[1])
   y[,2] <- qunif(x[,2], bound.lower[2], bound.upper[2]) 
   y[,3] <- qunif(x[,3], bound.lower[3], bound.upper[3])
@@ -165,7 +165,8 @@ fn.LHS <- function(n_samples, x, y, bound.upper, bound.lower) {
   y[,10] <- qunif(x[,10], bound.lower[10], bound.upper[10])
   y[,11] <- qunif(x[,11], bound.lower[11], bound.upper[11]) 
   y[,12] <- qigamma(x[,12], alpha.paleo, beta.paleo) # inverse gamma
-  y[,13] <- qigamma(x[,13], alpha.inst, beta.inst) # inverse gamma
+  #y[,13] <- qigamma(x[,13], alpha.inst, beta.inst) # inverse gamma
+  y[,13] <- qunif(x[,13], bound.lower[13], bound.upper[13]) # inverse gamma
   return(as.data.frame(y))
 }
 

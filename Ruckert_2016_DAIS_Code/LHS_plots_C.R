@@ -39,16 +39,23 @@ makeTransparent<- function(somecolor, alpha=100){
 }
 
 #------------------------------------- Expert Assessments -------------------------------------------
-#Set up previous study ranges for the year 2100 using RCP 8.5
+#Set up previous study ranges for the year 2100.
 #the previous ranges are in cm so divide by 100 to get meters
+# Non-model ranges
 pfeffer = c(12.8, 14.6, 61.9)/100 #Low2, low1, and high estimate in Pfeffer et al. 2008
-Bamber = c(-2, 13, 83)/100 # 5%, Median, 95% estimates in Bamber and Aspinall 2013
+Bamber = c(-2, 14, 83)/100 # 5%, Median, 95% estimates in Bamber and Aspinall 2013
+# IPCC_AR5 = c(-15, 4, 23)/100 # 5%, Median, 95% estimates in IPCC AR5
 IPCC_AR5 = c(-6, 4, 12)/100 # 5%, Median, 95% estimates in IPCC AR5
+
+# Based on models with projections using RCP 8.5
 Little = c(-8, 2.4, 13.3)/100 # 5%, Median, 95% estimates in Little et al. 2013
-# Little_unweighted = c(-14.7, -1.1, 12.6)/100 # 5%, Median, 95% estimates in Little et al. 2013
 Kopp = c(-11, 4, 33)/100 # 5%, Median, 95% estimates in Kopp et al. 2014
+Ritz = c(2, 11.9, 29.6)/100 # 5%, Median, 95% estimates in Ritz et al. 2015
+Golledge = c(0.1, 0.39) # 'low' and 'high' simulations in Golledge et al. 2015
 present = 2
 
+model_assessment_colors = c("#000000", "#004949", "#009292", "#49E9BD")
+nonmodel_assessment_colors = brewer.pal(5,"Blues")[3:5]
 #-------------------------- Set widths and heights ------------------------------
 inches_to_dpi = function(inch){ inch * 300 }
 
@@ -95,7 +102,8 @@ print(paste('median rmse = ', rmse_median))
 ###################################### SUPPLEMENTARY FIGURES ############################################
 #------------------------------------- Supplementary Figure 3 -------------------------------------------
 
-png(file="Scratch/Figures/SuppFigures/S2_Fig_inst2.tif", family="Helvetica", width=text_column_width,
+#pdf(file="Figures/SuppFigures/suppFig4_dais_LHS.pdf", family="Helvetica",height=5.4, width=6.7,pointsize=11)
+png(file="Scratch/Figures/SuppFigures/S2_Fig_inst2_2.tif", family="Helvetica", width=text_column_width,
 height=single_panel_height*2, units="in",pointsize=12, res=300)
 par(mfrow=c(2,1),mgp=c(1.5,.5,0), mar=c(3.5,4,1,2)) # set figure dimensions
 
@@ -120,19 +128,20 @@ add.hor.box(LIGprob_proj[,1], probs, width.size = 0.1, where.at = -0.37, tick.le
 add.hor.box(unprob_proj[,1], probs, width.size = 0.1, where.at = -0.45, tick.length = 0.01, line.width = 2, color = "gray91")
 
 abline(h=0.4, lty=2)
-text(14, 0.4+0.1, cex=0.75, "Last Interglacial period
-Data Constraint")
-text(14, 0.4-0.1, cex=0.75, "Model Inversion
-This study")
+abline(v=0, lty=2, col="gray")
+text(14, 0.4+0.1, cex=0.75, "Last Interglacial period\nData Constraint")
+text(14, 0.4-0.1, cex=0.75, "Model Inversion\nThis study")
 
 plotrange(windows[1,2], (windows[1,1] + windows[1,2])/2, windows[1,1], year=F, height=0.55, color="black")
 
+axis(3, labels = FALSE)
 put.fig.letter(label="a.", location="topleft", font=2)
 
 par(mgp=c(1.5,.5,0), mar=c(3.5, 3, 1, 2))
 plot(un.sf2100$pdf, main="",lwd=3, col="gray91", xlab="Projected AIS volume loss", sub= "in 2100 [SLE m]",
 ylab="Probability Density",
-xlim=c(-1.5,3.5), ylim=c(-5.5,14.5))#, yaxt="n") #ylim=c(-18,78)
+xlim=c(-0.25,4.75), ylim=c(-5.5,14.25), yaxt="n") #ylim=c(-18,78)
+#xlim=c(-3,1.75), ylim=c(-3,10.5))#, yaxt="n") #ylim=c(-18,78)
 
 lines(LIG.sf2100$pdf, col=mypalette[3], lwd=2)
 lines(LGM.sf2100$pdf, col=mypalette[5], lwd=2)
@@ -150,63 +159,84 @@ add.hor.box(LGMprob_proj[,6], probs, width.size = 1.2, where.at = -3.5, tick.len
 add.hor.box(LIGprob_proj[,6], probs, width.size = 1.2, where.at = -4.5, tick.length = 0.1, line.width = 2, color = mypalette[3])
 add.hor.box(unprob_proj[,6], probs, width.size = 1.2, where.at = -5.5, tick.length = 0.1, line.width = 2, color = "gray91")
 
-abline(h=11, lty=2)
-text(-1, 11+0.5, cex=0.65, "Expert Assessments")
-text(-1, 11-1, cex=0.65, "Model Inversion
-This study")
+abline(h=7, lty=2)
+abline(v=0, lty=2, col="gray")
+text(1.25, 7+0.5, cex=0.65, "Expert Assessments")
+text(1.25, 7-1, cex=0.65, "Model Inversion\nThis study")
 
-place.where = c(11.6,12.25,13,13.75,14.5)
+place.where = c(8.2, 9.2, 10.2, 11.2, 12.6, 13.6, 14.6)
+#place.where = c(8.2,9.7,11.2,12.7,14.2)
 #place.where = c(2.6,3.25,4,4.75,5.5)
-width = 0.45  # Width of bars
+width = 0.75  # Width of bars
+
+rect(-2.3, 11.5, 4.3, 16.0, col = "gray93", border=NA)
+
+# Model
 
 polygon(x = c(Little[1], Little[3], Little[3], Little[1]),
 y = c((place.where[1]), (place.where[1]),  (place.where[1] - width), (place.where[1]-width)),
-border=NA, col = expert_assessment[1])
-points(Little[2], (place.where[1]-0.2), col="black", pch="|", cex=0.5)
-
-polygon(x = c(IPCC_AR5[1], IPCC_AR5[3], IPCC_AR5[3], IPCC_AR5[1]),
-y = c((place.where[2]), (place.where[2]),  (place.where[2] - width), (place.where[2]-width)),
-border=NA, col = expert_assessment[2])
-points(IPCC_AR5[2], (place.where[2]-0.2), col="black", pch="|", cex=0.5)
+border=NA, col = model_assessment_colors[1])
+points(Little[2], (place.where[1]-0.2), col="black", pch="|", cex=0.8)
 
 polygon(x = c(Kopp[1], Kopp[3], Kopp[3], Kopp[1]),
+y = c((place.where[2]), (place.where[2]),  (place.where[2] - width), (place.where[2]-width)),
+border=NA, col = model_assessment_colors[2])
+points(Kopp[2], (place.where[2]-0.2), col="black", pch="|", cex=0.8)
+
+polygon(x = c(Ritz[1], Ritz[3], Ritz[3], Ritz[1]),
 y = c((place.where[3]), (place.where[3]),  (place.where[3] - width), (place.where[3]-width)),
-border=NA, col = expert_assessment[3])
-points(Kopp[2], (place.where[3]-0.2), col="black", pch="|", cex=0.5)
+border=NA, col = model_assessment_colors[3])
+points(Ritz[2], (place.where[3]-0.2), col="black", pch="|", cex=0.8)
+
+polygon(x = c(Golledge[1], Golledge[2], Golledge[2], Golledge[1]),
+y = c((place.where[4]), (place.where[4]),  (place.where[4] - width), (place.where[4]-width)),
+border=NA, col = model_assessment_colors[4])
+
+# Non-model
+
+polygon(x = c(IPCC_AR5[1], IPCC_AR5[3], IPCC_AR5[3], IPCC_AR5[1]),
+y = c((place.where[5]), (place.where[5]),  (place.where[5] - width), (place.where[5]-width)),
+border=NA, col = nonmodel_assessment_colors[1])
+points(IPCC_AR5[2], (place.where[5]-0.2), col="black", pch="|", cex=0.8)
 
 polygon(x = c(pfeffer[1], pfeffer[3], pfeffer[3], pfeffer[1]),
-y = c((place.where[4]), (place.where[4]),  (place.where[4] - width), (place.where[4]-width)),
-border=NA, col = expert_assessment[4])
-points(pfeffer[2], (place.where[4]-0.2), col="black", pch="|", cex=0.5)
+y = c((place.where[6]), (place.where[6]),  (place.where[6] - width), (place.where[6]-width)),
+border=NA, col = nonmodel_assessment_colors[2])
+points(pfeffer[2], (place.where[6]-0.2), col="black", pch="|", cex=0.8)
 
 polygon(x = c(Bamber[1], Bamber[3], Bamber[3], Bamber[1]),
-y = c((place.where[5]), (place.where[5]),  (place.where[5] - width), (place.where[5]-width)),
-border=NA, col = expert_assessment[5])
-points(Bamber[2], (place.where[5]-0.2), col="black", pch="|", cex=0.5)
+y = c((place.where[7]), (place.where[7]),  (place.where[7] - width), (place.where[7]-width)),
+border=NA, col = nonmodel_assessment_colors[3])
+points(Bamber[2], (place.where[7]-0.2), col="black", pch="|", cex=0.8)
 
+axis(3, labels = FALSE)
 put.fig.letter(label="b.", location="topleft", font=2)
+box()
 
-legend.names = c(paste("Unconstrained L.H. fits (", sample_length, ")", sep=""),
+legend.names = c("Median & 90% C.I. (Little et al. 2013)","Median & 90% C.I. (Kopp et al. 2014)",
+"Median & 90% C.I. (Ritz et al. 2015)", "'Low' & 'High' estimate (Golledge et al. 2015)",
+"Median & 90% C.I. (Church et al. 2013)", "'Low2', 'Low1', &'High' estimate\n(Pfeffer et al. 2008)",
+"Median & 90% C.I. (Bamber & Aspinall 2013)", paste("Unconstrained L.H. fits (", sample_length, ")", sep=""),
 paste("LIG constraint fits (", length(surLIG), ")", sep=""),
 paste("LGM constraint fits (", length(surLGM), ")", sep=""),
 paste("MH constraint fits (", length(surMH), ")", sep=""),
 paste("Instrumental constraint fits (", length(sur9311trend), ")", sep=""),
 #paste("All L.H. constrained fits (0)", sep=""),# length(sur.all), ")", sep=""),
-paste("All L.H. constrained fits (", length(sur.all), ")", sep=""),
-"Median & 90% C.I. (Little et al. 2013)","Median & 90% C.I. (Church et al. 2013)",
-"Median & 90% C.I. (Kopp et al. 2014)", "Mean & 90% C.I. (Pfeffer et al. 2008)",
-"Median & 90% C.I. (Bamber & Aspinall 2013)")
+paste("All L.H. constrained fits (", length(sur.all), ")", sep=""))
 
 legend("topright", legend.names, cex=0.575, pch=15, #bty="n",
-col=c("gray91", mypalette[3], mypalette[5], mypalette[1], mypalette[7],mypalette[9],expert_assessment))#,
+col=c(model_assessment_colors, nonmodel_assessment_colors,"gray91", mypalette[3], mypalette[5], mypalette[1], mypalette[7],mypalette[9]))#,
 #y.intersp=c(0.5,0.6,0.6,0.6, 0.6, 0.6,0.6,0.6,0.6,0.6,0.6))
 
 dev.off()
 
 #------------------------------------- Supplementary Figure 2 -------------------------------------------
 # # LHS hindcasts & projection
+# width=1920, height=1080
 png(file="Scratch/Figures/SuppFigures/S1_Fig_inst2.tif", family="Helvetica", width=text_column_width, height=single_panel_height*2, units="in",pointsize=12, res=300)
 par(mfrow=c(3,2), mgp=c(1.5,.5,0), mar=c(4, 4, 2, 1))
+# jpeg(file="nSuppFig3_dais_mcmcLHS.jpeg", family="Helvetica", width=1590, height=1920, units="px", pointsize=40)
+# par(mfrow=c(3,2), mgp=c(1.5,.5,0),mar=c(4, 4, 3, 2))
 
 # Last interglacial 240 kyr Bp - 2010 AD
 plot(date[1:240010], AIS_melt-mean(AIS_melt[SL.1961_1990]), type="l", col="powderblue", lwd=1,
@@ -314,7 +344,7 @@ axis(1, at = date[AD_1880]:date[240010], labels = FALSE, col=boxpalette[3], lwd=
 par(mgp=c(1.5,.5,0), mar=c(4, 3, 2, 2))
 
 plot(date[AD_1880:240010], Project_melt[AD_1880:240010]-mean(Project_melt[SL.1961_1990]), type="l", col="powderblue", lwd=1,
-     xlab="Date [yr BP]", ylab="AIS Volume loss [SLE m]", ylim=c(-0.4,0.4), xaxt="n") #(-0.10,0.05)
+     xlab="Date [yr AD]", ylab="AIS Volume loss [SLE m]", ylim=c(-0.6,0.6), xaxt="n") #(-0.10,0.05)
 for(i in 1:sample_length){
   lines(date, dais.pre.cali[i,], col="gray91", lwd=1)
 }
@@ -351,7 +381,7 @@ axis(1, at = date[240000]:date[240020], labels = FALSE, col=boxpalette[4], lwd=2
 par(mgp=c(1.5,.5,0), mar=c(4, 4, 2, 1))
 
 plot(date[240000:enddate], Project_melt[240000:enddate]-mean(Project_melt[SL.1961_1990]), type="l", col="powderblue", lwd=1,
-     xlab="Date [yr BP]", ylab="AIS Volume loss [SLE m]", xlim=c(-10,290),ylim=c(-0.4,20), xaxt="n") #ylim=c(-0.5,5)
+     xlab="Date [yr AD]", ylab="AIS Volume loss [SLE m]", xlim=c(-10,290),ylim=c(-0.4,20), xaxt="n") #ylim=c(-0.5,5)
 for(i in 1:sample_length){
   lines(date, dais.pre.cali[i,], col="gray91", lwd=1)
 }
