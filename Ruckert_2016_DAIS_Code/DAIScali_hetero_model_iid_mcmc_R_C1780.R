@@ -1,27 +1,42 @@
 #################################################################################
 #
 #  - file = "DAIScali_hetero_model_iid_mcmc_R_C1780.R"
-#  - Code written: August 2015, updated March 2016
+#  - Code written: August 2015, updated March 2016 & Sept. 2016
 #  - Author: Kelsey Ruckert (klr324@psu.edu)
 #
 #  -This program runs a Markov Chain Monte Carlo analysis of the DAIS model
-#       assuming heteroskedastic errors and IID residuals as described in Ruckert et al. (2016).
-#       For further description and references, please read the paper.
+#       assuming heteroskedastic errors and IID residuals.
+#  -NOTE: This program runs with the seed "1780". The point of this program is
+#       to check for MCMC convergence.
 #
-# THIS CODE IS PROVIDED AS-IS WITH NO WARRANTY (NEITHER EXPLICIT
-# NOT IMPLICIT).  I SHARE THIS CODE IN HOPES THAT IT IS USEFUL,
-# BUT I AM NOT LIABLE FOR THE BEHAVIOR OF THIS CODE IN YOUR OWN
-# APPLICATION.  YOU ARE FREE TO SHARE THIS CODE SO LONG AS THE
-# AUTHOR(S) AND VERSION HISTORY REMAIN INTACT.
+##==============================================================================
+## Copyright 2016 Kelsey Ruckert
+## This file is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This file is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this file.  If not, see <http://www.gnu.org/licenses/>.
+##==============================================================================
 #
 ###################################################################################
-rm(list =ls()) # Clear global environment
+# Clear global environment
+rm(list =ls())
+
+# Open packages:
+library(adaptMCMC)
 library(compiler)
 enableJIT(3)
 enableJIT(3)
 library(mcmc)
 
-#Set the seed.
+# Set the seed.
 set.seed(1780)
 
 # Read in hindcast/ forcing data, read in standard values, and read in AIS dates both specific and ranges so there is no use of magic numbers.
@@ -46,16 +61,15 @@ source("Data/DAIS_data_C.R")
 project.forcings = matrix(c(Ta, Toc, GSL, SL), ncol=4, nrow=240300)
 hindcast.forcings = matrix(c(Ta[1:240010], Toc[1:240010], GSL[1:240010], SL[1:240010]), ncol=4, nrow=240010)
 
-# SEt initial parameters to the best case (Case #4) from Shaffer (2014)
+# Set initial parameters to the best case (Case #4) from Shaffer (2014)
 IP = c(2, 0.35, 8.7, 0.012, 0.35, 0.04, 1.2, 1471, 95, 775, 0.0006)
-
-#Source the function with the standards and the initial parameters (IP) to
-#get the best estimated AIS volume loss 
 
 # Load in the physical model. Calls C model by default and set vector of standard values:
 source("models.R") 
 standards = c(Tf, rho_w, rho_i, rho_m, Toc_0, Rad0)
 
+# Source the function with the standards and the initial parameters (IP) to
+# get Case #4 estimated AIS volume loss
 # Estimate the AIS volume loss hindcast for Case #4 with respect to the present day in sea level equivalence (SLE):
 AIS_melt = iceflux(IP, hindcast.forcings, standards)
 
@@ -64,7 +78,8 @@ Project_melt = iceflux(IP, project.forcings, standards)
 
 ############################## Setup observational constraint info ##############################
 # For this model the residuals are based off of the windowing approach.
-# These windows are presented in Shaffer (2014) and calculated from figure 5 in Shepherd et al. (2012).
+# These windows are generated using the information from mulitple studies. See S1_text.pdf and
+# S1_Table.pdf in the Supporting Inofrmation for more details.
 
 # Accummulate the sea-level equivalent in meters from 1992 to the year 2002
 # using the 1992 to 2011 trend from Shepherd et al. 2012; -71 +/- 53 Gt per yr.
@@ -155,6 +170,7 @@ NI = 8E5
 #cat("Accept rate =", acceptrate, "%\n")
 
 ############################## RUN ADAPTIVE MCMC #######################################
+# load robust adaptive Metropolis
 library(adaptMCMC)
 
 # Set optimal acceptance rate as # parameters->infinity (Gelman et al, 1996; Roberts et al, 1997)
