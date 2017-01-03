@@ -1,32 +1,45 @@
 ###################################
-# file: DAIS_precali_LHS.R
+# file: DAIS_precali_LHS_C.R
 ###################################
 # Author and copyright: Kelsey Ruckert
 # Pennsylvania State University
 # klr324@psu.edu
-# Date: April 2015
+# Date: April 2015; updated Sep. 2016
 ###################################
 # Latin Hypercube Sampling of parameters
 # generates data frame with PDFs
 # This LHS precalibrates the parameters used in the DAIS Model
+##==============================================================================
+## Copyright 2016 Kelsey Ruckert
+## This file is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This file is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this file.  If not, see <http://www.gnu.org/licenses/>.
+##==============================================================================
 ###################################
-rm(list =ls()) # Clear global environment
+# Clear global environment
+rm(list =ls())
+
+# Install and open packages:
 #install.packages('lhs')
 #install.packages('compiler')
 #install.packages('pscl')
 require(lhs)
-library(pscl) # install inverse gamma distribution
+library(pscl)  # install inverse gamma distribution
 library(compiler)
 enableJIT(3)
 enableJIT(3)
 
 #Set the seed.
 set.seed(1234)
-
-## Run multiple times with different seeds to check for convergence &
-## robustness of the results:
-# set.seed(1780)
-# set.seed(1)
 
 # Read in hindcast/ forcing data, read in standard values, and read in AIS dates both specific and ranges so there is no use of magic numbers.
 source("Data/DAIS_data_C.R")
@@ -49,18 +62,16 @@ source("Data/DAIS_data_C.R")
 # Create matrices for projections and hindcasts.
 project.forcings = matrix(c(Ta, Toc, GSL, SL), ncol=4, nrow=240300)
 hindcast.forcings = matrix(c(Ta[1:240010], Toc[1:240010], GSL[1:240010], SL[1:240010]), ncol=4, nrow=240010)
-#hindcast.forcings = matrix(c(Ta[1:240011], Toc[1:240011], GSL[1:240011], SL[1:240011]), ncol=4, nrow=240011)
 
-# SEt initial parameters to the best case (Case #4) from Shaffer (2014)
+# Set initial parameters to the best case (Case #4) from Shaffer (2014)
 IP = c(2, 0.35, 8.7, 0.012, 0.35, 0.04, 1.2, 1471, 95, 775, 0.0006)
-
-#Source the function with the standards and the initial parameters (IP) to
-#get the best estimated AIS volume loss 
 
 # Load in the physical model. Calls C model by default and set vector of standard values:
 source("models.R") 
 standards = c(Tf, rho_w, rho_i, rho_m, Toc_0, Rad0, Volo)
 
+# Source the function with the standards and the initial parameters (IP) to
+# get Case #4 estimated AIS volume loss
 # Estimate the AIS volume loss hindcast for Case #4 with respect to the present day in sea level equivalence (SLE):
 AIS_melt = iceflux(IP, hindcast.forcings, standards[1:6])
 
@@ -69,7 +80,8 @@ Project_melt = iceflux(IP, project.forcings, standards[1:6])
 
 ############################## Setup observational constraint info ##############################
 # For this model the residuals are based off of the windowing approach.
-# These windows are presented in Shaffer (2014) and calculated from figure 5 in Shepherd et al. (2012).
+# These windows are generated using the information from mulitple studies. See S1_text.pdf and
+# S1_Table.pdf in the Supporting Inofrmation for more details.
 
 # Accummulate the sea-level equivalent in meters from 1992 to the year 2002
 # using the 1992 to 2011 trend from Shepherd et al. 2012; -71 +/- 53 Gt per yr.
@@ -90,16 +102,9 @@ SE2_2002 = estimate.SLE.error*2 # 2-sigma error
 positive_2SE = mid.cum.SLE_2002 + SE2_2002 
 negative_2SE = mid.cum.SLE_2002 - SE2_2002
 
-# New constraint
-#estimate.SLE.1992_2011 = abs(1350/360)/1000
-#estimate.SLE.1992_2011.err = abs(1010/360)/1000
-#windows.1992_2011 = c((abs(1350/360)/1000 - abs(1010/360)/1000), (abs(1350/360)/1000 + abs(1010/360)/1000))
-
 # Create observational constraint windows.
 upper.wind = c(6.0, -6.9, -1.25, positive_2SE)
 lower.wind = c(1.8, -15.8, -4.0, negative_2SE)
-#upper.wind = c(6.0, -6.9, -1.25, windows.1992_2011[2])
-#lower.wind = c(1.8, -15.8, -4.0, windows.1992_2011[1])
 windows = matrix(c(lower.wind, upper.wind), nrow = 4, ncol=2)
 
 # Determine observational error from windows: half-width of window = uncertainty; assume all windows are 2*stdErr (last one actually is)
@@ -108,7 +113,8 @@ obs.errs = (windows[,2]-windows[,1])*.5
 # Create a vector with each observation year.
 #            120 kyr, 20 Kyr,  6 kyr,  2002
 obs.years = c(120000, 220000, 234000, 240002)
-#obs.years = c(120000, 220000, 234000, 239992, 240011)
+
+############################## Setup parameter upper and lower bounds ##############################
 
 #Set the upper and lower bounds.
 bound.lower = IP - (IP*0.5)    ; bound.upper = IP + (IP*0.5)
@@ -117,9 +123,10 @@ print(bound.upper)
 
 # var.paleo and var.inst has inverse gamma prior, so there is a lower bound at 0 but no upper bound
 parnames    = c('gamma','alpha','mu'  ,'nu'  ,'P0' ,'kappa','f0' ,'h0'  ,'c'  , 'b0','slope' ,'var.paleo', 'var.inst')
-bound.upper = c( 4.25 ,  1     , 13.05, 0.018,0.525,  0.06 , 1.8 ,2206.5, 142.5, 825 , 0.00075,    Inf,       0.0004)#Inf)
+bound.upper = c( 4.25 ,  1     , 13.05, 0.018,0.525,  0.06 , 1.8 ,2206.5, 142.5, 825 , 0.00075,    Inf,       0.0004) # Inf)
 bound.lower = c( 0.5  ,  0     , 4.35 , 0.006,0.175,  0.02 , 0.6 , 735.5,  47.5, 725 , 0.00045 ,     0,       0)
 
+############################## Optimize parameters ##############################
 # Optimize the parameters to find the best hindcast and projection (slow ~50 minutes on single CPU)
 lower = bound.lower[1:11]
 upper = bound.upper[1:11]
@@ -140,8 +147,9 @@ best.project = iceflux(params, project.forcings, standards[1:6])
 save.image(file = "Scratch/Workspace/DAIS_precalibration_LHS_relative.RData")
 #----------------------------------------------------------------------#
 
+############################## Latin Hypercube Sampling ##############################
 # Set up the function for Latin Hypercube Sampling  -----------------------
-n_samples = 1300 # For 12 parameters 500 samples should be sufficient
+n_samples = 1300 # For 13 parameters 1300 samples should be sufficient
 n_parameters = 13
 # LHS Function
 fn.LHS <- function(n_samples, x, y, bound.upper, bound.lower) {
@@ -151,8 +159,6 @@ fn.LHS <- function(n_samples, x, y, bound.upper, bound.lower) {
   beta.paleo = 1
   #alpha.inst = 5.5
   #beta.inst = 0.25
-  #alpha.inst = 5600
-  #beta.inst = 1.8e-05
   y[,1] <- qunif(x[,1], bound.lower[1], bound.upper[1])
   y[,2] <- qunif(x[,2], bound.lower[2], bound.upper[2]) 
   y[,3] <- qunif(x[,3], bound.lower[3], bound.upper[3])
@@ -166,7 +172,7 @@ fn.LHS <- function(n_samples, x, y, bound.upper, bound.lower) {
   y[,11] <- qunif(x[,11], bound.lower[11], bound.upper[11]) 
   y[,12] <- qigamma(x[,12], alpha.paleo, beta.paleo) # inverse gamma
   #y[,13] <- qigamma(x[,13], alpha.inst, beta.inst) # inverse gamma
-  y[,13] <- qunif(x[,13], bound.lower[13], bound.upper[13]) # inverse gamma
+  y[,13] <- qunif(x[,13], bound.lower[13], bound.upper[13]) # uniform
   return(as.data.frame(y))
 }
 
@@ -193,6 +199,7 @@ for(i in 1:sample_length) {
   par[i,11] = Parameters[i,11]
 }
 
+############################## Estimate hindcasts and projections ##############################
 enddate = 240300
 lhs.dais.models = mat.or.vec(sample_length, enddate)
 
@@ -206,6 +213,7 @@ for(i in 1:sample_length){
   lhs.dais.mpanom[i,] = lhs.dais.models[i,] - mean(lhs.dais.models[i,SL.1961_1990])
 }
 
+############################## Estimate hindcasts and projections ##############################
 ### Superimpose the bias onto the model
 ### True world = model + bias
 paleo.bias = sqrt(Parameters[,12])
@@ -229,6 +237,8 @@ for(n in 1:sample_length) {
     }
 }
 
+### Superimpose the bias onto the model
+### True world = model + bias
 dais.pre.cali = mat.or.vec(sample_length, enddate)
 for(i in 1:sample_length){
     dais.pre.cali[i,1:234999] = lhs.dais.mpanom[i,1:234999] + rnorm(234999, mean=0, sd=paleo.bias[i])
@@ -246,6 +256,8 @@ dais.1992_2011[i] = dais.pre.cali[i,obs.years[4]] - dais.pre.cali[i,239992]
 
 #------------------ Save the workspace --------------------------------#
 save.image(file = "Scratch/Workspace/DAIS_precalibration_LHS_relative_2.RData")
+
+############################## Extract values during each observational constrant ##############################
 # Write csv of SLE values for the targeted years -------------------------------------------------------------------
 surv.targ = matrix(c(dais.pre.cali[1:sample_length,120000], dais.pre.cali[1:sample_length,220000],dais.pre.cali[1:sample_length,234000], 
                      dais.pre.cali[1:sample_length,240002]), nrow=sample_length, ncol=4)
@@ -257,12 +269,13 @@ surv.targ.nonoise = matrix(c(lhs.dais.mpanom[1:sample_length,120000], lhs.dais.m
                              lhs.dais.mpanom[1:sample_length,234000], lhs.dais.mpanom[1:sample_length,240002]), 
                            nrow=sample_length, ncol=4)
 
-#------------------------ Find the runs that pass through each constraint ---------------------------
+############################## Find the runs that pass through each constraint ##############################
+#------------------------ With the superimposed noise ---------------------------
 source("Scripts/surviveTargetfunc.R")
 surLIG = surviveTarget(windows[1,], surv.targ[,1])
 surLGM = surviveTarget(windows[2,], surv.targ[,2])
 surMH = surviveTarget(windows[3,], surv.targ[,3])
-#sur9311trend = surviveTarget(windows[4,], surv.targ[,4])
+# sur9311trend = surviveTarget(windows[4,], surv.targ[,4])
 sur9311trend = surviveTarget(windows[4,], dais.1992_2011)
 
 # If sur9311trend is true then uncomment the lines with sur9311trend or sur.all
@@ -286,7 +299,7 @@ constraints = c("No constraints","Last integlacial","Last glacial maximum","Mid-
 table.parts = matrix(c(constraints, percent.include), nrow=6, ncol=2)
 write.csv(table.parts, file="Scratch/Random_out/constraint_trend_percent_relative1992_2.csv")
 
-# No noise ----------------------------------------------------------------
+#------------------------ WITHOUT the superimposed noise ---------------------------
 surLIG_NN = surviveTarget(windows[1,], surv.targ.nonoise[,1])
 surLGM_NN = surviveTarget(windows[2,], surv.targ.nonoise[,2])
 surMH_NN = surviveTarget(windows[3,], surv.targ.nonoise[,3])
