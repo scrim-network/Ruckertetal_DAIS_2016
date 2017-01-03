@@ -1,6 +1,33 @@
-# file = DaisDE.R
-#Function of the Shaffer DAIS model 2014
-# This function/DAIS model estimates the sea-level equivalence of Antarctic ice sheet melt
+###################################
+## file: optimize_DAIS_model_C.R
+###################################
+## Author and copyright: Kelsey Ruckert
+## Pennsylvania State University
+# klr324@psu.edu
+## Date: April 2015; updated July 2016
+###################################
+## Function of the Shaffer DAIS model 2014
+## This function/DAIS model returns the root mean square error of the hindcast
+## compared to observational constraints. The point of this function is to be
+## used for optimization.
+##==============================================================================
+## Copyright 2016 Kelsey Ruckert
+## This file is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This file is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this file.  If not, see <http://www.gnu.org/licenses/>.
+##==============================================================================
+###################################
+
+# DAIS Model
 optimize_dais = function(parameters, forcings, standards, windows, obs.years){
   
   Gamma = parameters[1]         # sensitivity of ice flow to sea level
