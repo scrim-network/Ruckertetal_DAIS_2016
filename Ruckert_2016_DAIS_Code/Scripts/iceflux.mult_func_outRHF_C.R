@@ -1,6 +1,37 @@
-# file = iceflux.mult_function.R
-#Function of the Shaffer DAIS model 2014
-# This function/DAIS model estimates the sea-level equivalence of Antarctic ice sheet melt
+###################################
+## file: iceflux.mult_func_outRHF_C.R
+###################################
+## Author and copyright: Kelsey Ruckert
+## Pennsylvania State University
+# klr324@psu.edu
+## Date: 08 Oct. 2015; updated July 28 2016
+###################################
+## Function of the Shaffer DAIS model 2014
+## This function/DAIS model estimates and returns the
+##      1) sea-level equivalence,
+##      2) ice sheet volume,
+##      3) ice sheet radius,
+##      4) ice flux at the grounding line, and
+##      5) water depth at the grounding line.
+##
+##==============================================================================
+## Copyright 2016 Kelsey Ruckert
+## This file is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This file is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this file.  If not, see <http://www.gnu.org/licenses/>.
+##==============================================================================
+###################################
+
+# DAIS Model
 iceflux_RHF = function(parameters, forcings, standards){
   model.p = length(parameters)
   
