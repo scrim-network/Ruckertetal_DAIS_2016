@@ -8,11 +8,19 @@
 ##
 ## -Output: Which runs in a vector fall within a certain range [Target]
 #############################################################
-## THIS CODE IS PROVIDED AS-IS WITH NO WARRANTY (NEITHER EXPLICIT
-## NOR IMPLICIT).  I SHARE THIS CODE IN HOPES THAT IT IS USEFUL, 
-## BUT I AM NOT LIABLE FOR THE BEHAVIOR OF THIS CODE IN YOUR OWN
-## APPLICATION.  YOU ARE FREE TO SHARE THIS CODE SO LONG AS THE
-## AUTHOR(S) AND VERSION HISTORY REMAIN INTACT.
+## Copyright 2016 Kelsey Ruckert
+## This file is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This file is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this file.  If not, see <http://www.gnu.org/licenses/>.
 ##
 ## -Author: Kelsey Ruckert (klr324@psu.edu)
 ## -June 10 2015
