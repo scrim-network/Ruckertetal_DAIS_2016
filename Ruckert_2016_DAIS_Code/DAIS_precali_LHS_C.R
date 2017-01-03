@@ -121,7 +121,7 @@ bound.lower = IP - (IP*0.5)    ; bound.upper = IP + (IP*0.5)
 print(bound.lower)
 print(bound.upper)
 
-# var.paleo and var.inst has inverse gamma prior, so there is a lower bound at 0 but no upper bound
+# var.paleo has inverse gamma prior, so there is a lower bound at 0 but no upper bound
 parnames    = c('gamma','alpha','mu'  ,'nu'  ,'P0' ,'kappa','f0' ,'h0'  ,'c'  , 'b0','slope' ,'var.paleo', 'var.inst')
 bound.upper = c( 4.25 ,  1     , 13.05, 0.018,0.525,  0.06 , 1.8 ,2206.5, 142.5, 825 , 0.00075,    Inf,       0.0004) # Inf)
 bound.lower = c( 0.5  ,  0     , 4.35 , 0.006,0.175,  0.02 , 0.6 , 735.5,  47.5, 725 , 0.00045 ,     0,       0)
