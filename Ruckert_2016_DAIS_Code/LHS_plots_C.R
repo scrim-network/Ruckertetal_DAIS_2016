@@ -1,17 +1,32 @@
 ##################################################################################################
 #
-#  -file = "LHS_plots.R"   Code written September 2014 edited March 2016
+#  -file = "LHS_plots_C.R"   Code written September 2014 edited March 2016
 #  - Author: Kelsey Ruckert (klr324@psu.edu)
 #
-#  -This program loads in the LHS workspace
+#  -This program loads in the LHS workspace and creates supplementary Fig 1 and 2
 #
-#   -NOTE: The graphs will be saved as tif files in the current working directory.
+#   -NOTE: The graphs will be saved as tif files.
 #
+##==============================================================================
+## Copyright 2016 Kelsey Ruckert
+## This file is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This file is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this file.  If not, see <http://www.gnu.org/licenses/>.
 ###################################################################################################
 
-#load("Scratch/Workspace/DAIS_precalibration_LHS_C.RData") # Load in the saved workspace from LHS precalibration
+# Load in the saved workspace from LHS precalibration
 load("Scratch/Workspace/DAIS_precalibration_LHS_relative_2.RData")
 
+# Install and open packages:
 #install.packages('ash')
 library(ash)
 #install.packages('fields')
@@ -19,10 +34,12 @@ library(fields)
 #install.packages('RColorBrewer')
 library(RColorBrewer)
 
+# Create color palettes
 mypalette <- brewer.pal(9,"YlGnBu")
 boxpalette <- brewer.pal(11,"Spectral")
 expert_assessment <- brewer.pal(5,"Pastel2")
 
+# Source plotting functions
 source("Scripts/put_fig_letter.r")
 source("Scripts/plot_rangefn.R")
 
@@ -39,12 +56,11 @@ makeTransparent<- function(somecolor, alpha=100){
 }
 
 #------------------------------------- Expert Assessments -------------------------------------------
-#Set up previous study ranges for the year 2100.
-#the previous ranges are in cm so divide by 100 to get meters
+# Set up previous study ranges for the year 2100.
+# the previous ranges are in cm so divide by 100 to get meters
 # Non-model ranges
 pfeffer = c(12.8, 14.6, 61.9)/100 #Low2, low1, and high estimate in Pfeffer et al. 2008
 Bamber = c(-2, 14, 83)/100 # 5%, Median, 95% estimates in Bamber and Aspinall 2013
-# IPCC_AR5 = c(-15, 4, 23)/100 # 5%, Median, 95% estimates in IPCC AR5
 IPCC_AR5 = c(-6, 4, 12)/100 # 5%, Median, 95% estimates in IPCC AR5
 
 # Based on models with projections using RCP 8.5
@@ -56,6 +72,7 @@ present = 2
 
 model_assessment_colors = c("#000000", "#004949", "#009292", "#49E9BD")
 nonmodel_assessment_colors = brewer.pal(5,"Blues")[3:5]
+
 #-------------------------- Set widths and heights ------------------------------
 inches_to_dpi = function(inch){ inch * 300 }
 
@@ -100,13 +117,14 @@ print(paste('median rmse = ', rmse_median))
 #print(paste('optim command without noise rmse = ', rmse_optim))
 
 ###################################### SUPPLEMENTARY FIGURES ############################################
-#------------------------------------- Supplementary Figure 3 -------------------------------------------
+#------------------------------------- Supplementary Figure 2 -------------------------------------------
 
 #pdf(file="Figures/SuppFigures/suppFig4_dais_LHS.pdf", family="Helvetica",height=5.4, width=6.7,pointsize=11)
 png(file="Scratch/Figures/SuppFigures/S2_Fig_inst2_2.tif", family="Helvetica", width=text_column_width,
 height=single_panel_height*2, units="in",pointsize=12, res=300)
 par(mfrow=c(2,1),mgp=c(1.5,.5,0), mar=c(3.5,4,1,2)) # set figure dimensions
 
+# Panel a) Hindcasts during the Last interglacial
 plot(un.sflig$pdf, main="",lwd=3, col="gray91", xlab="Projected AIS volume loss", sub="during Last interglacial [SLE m]",
 ylab="Probability Density",xlim=c(-10,25), ylim=c(-0.45,0.6), yaxt="n")
 #ylab="Probability Density",xlim=c(min(un.sflig$pdf$x),20), ylim=c(-0.45,0.6), yaxt="n")
@@ -117,6 +135,7 @@ lines(MH.sflig$pdf, col=mypalette[1], lwd=2)
 lines(present.sflig$pdf, col=mypalette[7], lwd=2)
 lines(all.sflig$pdf, col=mypalette[9], lwd=2)
 
+# Add box and whisker plots
 probs = c(0.05, 0.95)
 #where = c(-0.03, -0.08, -0.16, -0.24, -0.32, -0.4)
 add.hor.box(all.prob_proj[,1], probs, width.size = 0.1, where.at = -0.05, tick.length = 0.01, line.width = 2, color = mypalette[9])
@@ -132,11 +151,13 @@ abline(v=0, lty=2, col="gray")
 text(14, 0.4+0.1, cex=0.75, "Last Interglacial period\nData Constraint")
 text(14, 0.4-0.1, cex=0.75, "Model Inversion\nThis study")
 
+# Add range of observational constraint during the Last interglacial
 plotrange(windows[1,2], (windows[1,1] + windows[1,2])/2, windows[1,1], year=F, height=0.55, color="black")
 
 axis(3, labels = FALSE)
 put.fig.letter(label="a.", location="topleft", font=2)
-
+#=======
+# Panel b) Projections in the year 2100
 par(mgp=c(1.5,.5,0), mar=c(3.5, 3, 1, 2))
 plot(un.sf2100$pdf, main="",lwd=3, col="gray91", xlab="Projected AIS volume loss", sub= "in 2100 [SLE m]",
 ylab="Probability Density",
@@ -149,6 +170,7 @@ lines(MH.sf2100$pdf, col=mypalette[1], lwd=2)
 lines(present.sf2100$pdf, col=mypalette[7], lwd=2)
 lines(all.sf2100$pdf, col=mypalette[9], lwd=2)
 
+# Add box and whisker plots
 probs = c(0.05, 0.95)
 #where = c(-0.2, -0.5, -1, -1.5, -2, -2.5)
 add.hor.box(all.prob_proj[,6], probs, width.size = 1.2, where.at = -0.5, tick.length = 0.1, line.width = 2, color = mypalette[9])
@@ -166,11 +188,11 @@ text(1.25, 7-1, cex=0.65, "Model Inversion\nThis study")
 
 place.where = c(8.2, 9.2, 10.2, 11.2, 12.6, 13.6, 14.6)
 #place.where = c(8.2,9.7,11.2,12.7,14.2)
-#place.where = c(2.6,3.25,4,4.75,5.5)
 width = 0.75  # Width of bars
 
 rect(-2.3, 11.5, 4.3, 16.0, col = "gray93", border=NA)
 
+# Add ranges from model and non-model expert assessments
 # Model
 
 polygon(x = c(Little[1], Little[3], Little[3], Little[1]),
@@ -230,7 +252,7 @@ col=c(model_assessment_colors, nonmodel_assessment_colors,"gray91", mypalette[3]
 
 dev.off()
 
-#------------------------------------- Supplementary Figure 2 -------------------------------------------
+#------------------------------------- Supplementary Figure 1 -------------------------------------------
 # # LHS hindcasts & projection
 # width=1920, height=1080
 png(file="Scratch/Figures/SuppFigures/S1_Fig_inst2.tif", family="Helvetica", width=text_column_width, height=single_panel_height*2, units="in",pointsize=12, res=300)
