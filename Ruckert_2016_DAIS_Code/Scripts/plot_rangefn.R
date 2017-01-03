@@ -1,26 +1,40 @@
 #######################################################################
-#
-# plot_sf.r    15 Jan 2015
-#
-# THIS CODE IS PROVIDED AS-IS WITH NO WARRANTY (NEITHER EXPLICIT
-# NOR IMPLICIT).  I SHARE THIS CODE IN HOPES THAT IT IS USEFUL, 
-# BUT I AM NOT LIABLE FOR THE BEHAVIOR OF THIS CODE IN YOUR OWN
-# APPLICATION.  YOU ARE FREE TO SHARE THIS CODE SO LONG AS THE
-# AUTHOR(S) AND VERSION HISTORY REMAIN INTACT.
-#
-# Function Name: plot.sf
-# Parameters:
-#   x - Data vector to be plotted
-#   xlab - X-axis label (default = name of the data object passed
-#          to the function)
-#   left.tail - Should the plot highlight the left-tail instead of the 
-#               right-tail? (default = F)
-#   ylab - Y-axis label (default = SF  [1 - Cum. Freq.]) 
-#   make.plot - Boolean value determining whether or not to make a plot
-#               (default = T)
-#   ... - Other parameters to be passed to the plot() function
-#
-#
+## -file = plot_rangefn.R
+## -Input: For ploting a range [plotrange]:
+##         The lower bound of the range [low.number]
+##         A value between the lower and upper bound [median]
+##         The upper bound of the range [high.number]
+##         Plot the range vertically; the range is associate with y-axis [year; T or F]
+##         Plot the range horizontally; the range is associate with x-axis  [height; T or F]
+##         Color of lines and points [color]
+##
+## -Input: For ploting a blox plot [add.hor.box]:
+##         Vector of values [data.numbers]
+##         Vector of two values specifying other probabilities to be estimated and ploted [probabilities]
+##         Width of the box [width.size]
+##         Location where the boxplot should be drawn [where.at]
+##         Width of line segments showing the specified probability [line.width]
+##         Length of line segments showing the specified probability [tick.length]
+##         Color of lines and points [color]
+##
+## -Output: Adds a range or box and whisker to an existing plot
+#############################################################
+## Copyright 2015 Kelsey Ruckert
+## This file is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This file is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this file.  If not, see <http://www.gnu.org/licenses/>.
+##
+## -Author: Kelsey Ruckert (klr324@psu.edu)
+## -June 10 2015
 #######################################################################
 # Function to plot a range on an existing plot
 plotrange <- function(low.number, median, high.number, year=T, height=F, color){
@@ -44,8 +58,9 @@ plotrange <- function(low.number, median, high.number, year=T, height=F, color){
   }
 }
 
-#Function to plot a blox plot on an existing plot with adding lines showing select probabilities
+# Function to plot a blox plot on an existing plot with adding lines showing select probabilities
 add.hor.box <- function(data.numbers, probabilities, width.size, where.at, tick.length, line.width, color){
+    
   quants <- quantile(data.numbers, probabilities)
   boxplot(data.numbers, add=TRUE, horizontal=TRUE, axes=FALSE, outline=FALSE, col=color, boxwex=width.size, at=where.at)
   segments(x0 = quants, y0 = rep(where.at - tick.length, 2),
