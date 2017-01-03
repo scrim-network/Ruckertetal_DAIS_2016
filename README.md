@@ -32,7 +32,7 @@ compiler
 mcmc  
 ash  
 fields  
-RColorBrewer
+RColorBrewer  
 plotrix  
 
 You can install and open the packages in R as shown in the example below, which installs the adaptMCMC package.
