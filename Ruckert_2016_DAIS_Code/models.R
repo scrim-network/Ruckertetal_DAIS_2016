@@ -1,12 +1,38 @@
+###################################
+## file: model.R  05 Feb. 2016
+##
+## Author: Robert Fuller   (rwf136@psu.edu)
+## Edits by Kelsey Ruckert (klr324@psu.edu)
+## Pennsylvania State University
+##
+## Note: This code calls the DAIS model written in different languages:
+## R, FORTRAN, and C. The default calls the C model, which is the version
+## used in Ruckert et al. (2017).
+##
+## Copyright 2016 Robert Fuller, Kelsey Ruckert
+## This file is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This file is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this file.  If not, see <http://www.gnu.org/licenses/>.
+##==============================================================================
+###################################
 useCmodel <- T
 useFmodel <- F
 
-
+# Call the R DAIS function
 if (!useCmodel && !useFmodel) {
     source("Scripts/DAIS_IceFlux_model.R")
 }
 
-
+# Call the FORTRAN DAIS function
 if (useFmodel) {
     source("daisF.R")
 
@@ -40,7 +66,7 @@ if (useFmodel) {
     }
 }
 
-
+# Call the C DAIS function
 if (useCmodel) {
     source("roblib.R")
     dynReload("dais", srcname=c("dais.c", "r.c"), extrasrc="r.h")
