@@ -1,15 +1,35 @@
 #--------- Markov Chain Monte Carlo DAIS Simulations
-# file ~ DAIS_convergence_plots.R
+#  - file ~ DAIS_convergence_plotsR_C.R
+#  - Code written: March 2016
+#  - Author: Kelsey Ruckert (klr324@psu.edu)
+#
+#  -This program assesses the convergence of the DAIS model using the
+#       Heidelberger and Welch's convergence diagnostic and the Potential
+#       scale reduction factor. For this we assess the output from multiple
+#       seeds (1234 & 1780).
+#
+##==============================================================================
+## Copyright 2016 Kelsey Ruckert
+## This file is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This file is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this file.  If not, see <http://www.gnu.org/licenses/>.
+##==============================================================================
 ########### Plot the results for further analysis on convergence #################################
-#install.packages("R.matlab")
-#library(R.matlab)
+#install.packages("coda")
 library(coda)
 
 ################################## CONVERGENCE ####################################
-# Test for MCMC chain convergence:
-load("Scratch/Workspace/DAIS_calib_MCMC_C1234_realtive.RData")
+# Test for MCMC chain (1234) convergence:
 load("DAIS_calib_MCMC_C1234_relative_8e5.RData")
-#load("Scratch/Workspace/DAIS_calib_MCMC_C1234.RData")
 
 NI = length(DAIS_chains[,1])
 burnin.length = (NI*0.04)+1
@@ -17,42 +37,42 @@ burnin.length = (NI*0.04)+1
 results = DAIS_chains[burnin.length:NI,]
 NI = length(results[,1])
 
+# Heidelberger and Welch's convergence diagnostic
 #conv = results[length(burnin):NI,]
 heidel.diag(results, eps=0.1, pvalue=0.05)
 
-#Load in workspaces saved from using multiple seeds
-#load("Scratch/Workspace/DAIS_calib_MCMC_C1780.RData") # seed 1780
-load("Scratch/Workspace/DAIS_calib_MCMC_C1780_relative.RData") # seed 1780
+# Test for MCMC chain (1780) convergence:
+load("Scratch/Workspace/DAIS_calib_MCMC_C1780_relative__8e5.RData") # seed 1780
 
 NI = length(DAIS_chains1780[,1])
 results_1780 = DAIS_chains1780[burnin.length:NI,]
 NI = length(results_1780[,1])
 
+# Heidelberger and Welch's convergence diagnostic
 #conv = results[length(burnin):NI,]
 heidel.diag(results_1780, eps=0.1, pvalue=0.05)
 
-#load("Scratch/Workspace/DAIS_calib_MCMC_C1.RData") # seed 1
-# loading this workspace rewrites DAIS_chains1780
+## ============ TEST 3rd seed (Not used in the analysis for the paper) ============
+# Test for MCMC chain (1) convergence:
+# load("Scratch/Workspace/DAIS_calib_MCMC_C1.RData") # seed 1
 
-#NI = length(DAIS_chains1780[,1])
-#results_1 = DAIS_chains1780[burnin.length:NI,]
-#NI = length(results_1[,1])
+# NI = length(DAIS_chains1780[,1])
+# results_1 = DAIS_chains1780[burnin.length:NI,]
+# NI = length(results_1[,1])
 
-#conv = results[length(burnin):NI,]
-#heidel.diag(results_1, eps=0.1, pvalue=0.05)
+# # Heidelberger and Welch's convergence diagnostic
+# conv = results[length(burnin):NI,]
+# heidel.diag(results_1, eps=0.1, pvalue=0.05)
+##==============================================================================
 
-# mcmc is converged when the potental scale reduction factor is less than 1.1
-#heter = as.mcmc(results)
-#heter2 = as.mcmc(results_1780)
-#heter3 = as.mcmc(results_1)
-
-#heterlist = mcmc.list(list(heter, heter2, heter3))
-#gelman.diag(heterlist)
-
+# Potential Scale Reduction Factor
+# MCMC is converged when the potental scale reduction factor is less than 1.1
 heter = as.mcmc(results)
 heter2 = as.mcmc(results_1780)
+# heter3 = as.mcmc(results_1)
 
 heterlist = mcmc.list(list(heter, heter2))
+# heterlist = mcmc.list(list(heter, heter2, heter3))
 gelman.diag(heterlist)
 
 ################################## TRACE PLOTS ####################################
