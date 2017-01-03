@@ -33,6 +33,8 @@ library(ash)
 library(fields)
 #install.packages('RColorBrewer')
 library(RColorBrewer)
+#install.packages('plotrix')
+library(plotrix)
 
 # Create color palettes
 mypalette <- brewer.pal(9,"YlGnBu")
