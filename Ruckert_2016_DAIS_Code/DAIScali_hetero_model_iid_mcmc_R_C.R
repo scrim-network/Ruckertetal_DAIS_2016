@@ -1,33 +1,42 @@
 #################################################################################
 #
-#  - file = "DAIScali_hetero_model_iid_mcmcRversion.R"
-#  - Code written: August 2015, updated March 2016
+#  - file = "DAIScali_hetero_model_iid_mcmc_R_C.R"
+#  - Code written: August 2015, updated March 2016 & Sept. 2016
 #  - Author: Kelsey Ruckert (klr324@psu.edu)
 #
 #  -This program runs a Markov Chain Monte Carlo analysis of the DAIS model
-#       assuming heteroskedastic errors and IID residuals as described in Ruckert et al. (2016).
+#       assuming heteroskedastic errors and IID residuals as described in Ruckert et al. (2017).
 #       For further description and references, please read the paper.
 #
-# THIS CODE IS PROVIDED AS-IS WITH NO WARRANTY (NEITHER EXPLICIT
-# NOT IMPLICIT).  I SHARE THIS CODE IN HOPES THAT IT IS USEFUL,
-# BUT I AM NOT LIABLE FOR THE BEHAVIOR OF THIS CODE IN YOUR OWN
-# APPLICATION.  YOU ARE FREE TO SHARE THIS CODE SO LONG AS THE
-# AUTHOR(S) AND VERSION HISTORY REMAIN INTACT.
+##==============================================================================
+## Copyright 2016 Kelsey Ruckert
+## This file is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This file is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this file.  If not, see <http://www.gnu.org/licenses/>.
+##==============================================================================
 #
 ###################################################################################
-rm(list =ls()) # Clear global environment
+# Clear global environment
+rm(list =ls())
+
+# Open packages:
+library(adaptMCMC)
 library(compiler)
 enableJIT(3)
 enableJIT(3)
 library(mcmc)
 
-#Set the seed.
+# Set the seed.
 set.seed(1234)
-
-## Run multiple times with different seeds to check for convergence &
-## robustness of the results:
-# set.seed(1780)
-# set.seed(1)
 
 # Read in hindcast/ forcing data, read in standard values, and read in AIS dates both specific and ranges so there is no use of magic numbers.
 source("Data/DAIS_data_C.R")
@@ -50,18 +59,16 @@ source("Data/DAIS_data_C.R")
 # Create matrices for projections and hindcasts.
 project.forcings = matrix(c(Ta, Toc, GSL, SL), ncol=4, nrow=240300)
 hindcast.forcings = matrix(c(Ta[1:240010], Toc[1:240010], GSL[1:240010], SL[1:240010]), ncol=4, nrow=240010)
-#hindcast.forcings = matrix(c(Ta[1:240011], Toc[1:240011], GSL[1:240011], SL[1:240011]), ncol=4, nrow=240011)
 
-# SEt initial parameters to the best case (Case #4) from Shaffer (2014)
+# Set initial parameters to the best case (Case #4) from Shaffer (2014)
 IP = c(2, 0.35, 8.7, 0.012, 0.35, 0.04, 1.2, 1471, 95, 775, 0.0006)
-
-#Source the function with the standards and the initial parameters (IP) to
-#get the best estimated AIS volume loss 
 
 # Load in the physical model. Calls C model by default and set vector of standard values:
 source("models.R") 
 standards = c(Tf, rho_w, rho_i, rho_m, Toc_0, Rad0) # Volo is specified in the model
 
+# Source the function with the standards and the initial parameters (IP) to
+# get Case #4 estimated AIS volume loss
 # Estimate the AIS volume loss hindcast for Case #4 with respect to the present day in sea level equivalence (SLE):
 AIS_melt = iceflux(IP, hindcast.forcings, standards)
 
@@ -70,7 +77,8 @@ Project_melt = iceflux(IP, project.forcings, standards)
 
 ############################## Setup observational constraint info ##############################
 # For this model the residuals are based off of the windowing approach.
-# These windows are presented in Shaffer (2014) and calculated from figure 5 in Shepherd et al. (2012).
+# These windows are generated using the information from mulitple studies. See S1_text.pdf and
+# S1_Table.pdf in the Supporting Inofrmation for more details.
 
 # Accummulate the sea-level equivalent in meters from 1992 to the year 2002
 # using the 1992 to 2011 trend from Shepherd et al. 2012; -71 +/- 53 Gt per yr.
@@ -91,16 +99,9 @@ SE2_2002 = estimate.SLE.error*2 # 2-sigma error
 positive_2SE = mid.cum.SLE_2002 + SE2_2002 
 negative_2SE = mid.cum.SLE_2002 - SE2_2002
 
-# New constraint
-#estimate.SLE.1992_2011 = abs(1350/360)/1000
-#estimate.SLE.1992_2011.err = abs(1010/360)/1000
-#windows.1992_2011 = c((abs(1350/360)/1000 - abs(1010/360)/1000), (abs(1350/360)/1000 + abs(1010/360)/1000))
-
 # Create observational constraint windows.
 upper.wind = c(6.0, -6.9, -1.25, positive_2SE )
 lower.wind = c(1.8, -15.8, -4.0, negative_2SE)
-#upper.wind = c(6.0, -6.9, -1.25, windows.1992_2011[2])
-#lower.wind = c(1.8, -15.8, -4.0, windows.1992_2011[1])
 windows = matrix(c(lower.wind, upper.wind), nrow = 4, ncol=2)
 
 # Determine observational error from windows: half-width of window = uncertainty; assume all windows are 2*stdErr (last one actually is)
@@ -109,7 +110,6 @@ obs.errs = (windows[,2]-windows[,1])*.5
 # Create a vector with each observation year.
 #            120 kyr, 20 Kyr,  6 kyr,  2002
 obs.years = c(120000, 220000, 234000, 240002)
-#obs.years = c(120000, 220000, 234000, 239992, 240011)
 
 ############################## CALCULATE RESIDUALS and INITIAL SIGMA VALUE ##############################
 #resid <- rep(NA,length(obs.years))
@@ -136,9 +136,9 @@ bound.lower = IP - (IP*0.5)    ; bound.upper = IP + (IP*0.5)
 print(bound.lower)
 print(bound.upper)
 
-# var.y has inverse gamma prior, so there is a lower bound at 0 but no upper bound
+# var.paleo has inverse gamma prior, so there is a lower bound at 0 but no upper bound
 parnames    = c('gamma','alpha','mu'  ,'nu'  ,'P0' ,'kappa','f0' ,'h0'  ,'c'  , 'b0','slope' ,'var.paleo', 'var.inst')
-bound.upper = c( 4.25 ,  1     , 13.05, 0.018,0.525,  0.06 , 1.8 ,2206.5, 142.5, 825 , 0.00075,     Inf,       0.0004) #Inf)
+bound.upper = c( 4.25 ,  1     , 13.05, 0.018,0.525,  0.06 , 1.8 ,2206.5, 142.5, 825 , 0.00075,     Inf,       0.0004) # Inf)
 bound.lower = c( 0.5  ,  0     , 4.35 , 0.006,0.175,  0.02 , 0.6 , 735.5,  47.5, 725 , 0.00045 ,      0,       0)
 
 # Specify the number of model parameters.
@@ -152,7 +152,6 @@ source("Scripts/DAISobs_likelihood_iid.R")
 p = c(IP, paleo_variance, inst_variance) # Shaffer [2014] Case #4 parameters
 p0 = c(2.1, 0.29, 8, 0.015, 0.4, 0.04, 1.0, 1450, 90, 770, 0.0005, 0.6, (5.5e-5)^2) # Random guesses
 #p0 = c(2.1, 0.29, 8, 0.015, 0.4, 0.04, 1.0, 1450, 90, 770, 0.0005, 0.6, 0.0001)
-#p0 = c(2.1, 0.29, 8, 0.015, 0.4, 0.04, 1.0, 1450, 90, 770, 0.0005, 0.6, 0.055)
 p0 = optim(p0, function(p) - log.post(p))$par
 print(round(p0,4))
 
@@ -161,8 +160,6 @@ print(round(p0,4))
 #step = c(0.1, 0.015, 0.2, 0.035, 0.1, 0.01, 0.1, 50, 10, 25, 0.0005, 0.1)/5
 #step = c(0.001, 0.0001, 0.001, 0.00001, 0.0001, 0.00001, 0.001, 0.5, 0.1, 0.5, 0.000001, 0.001)
 NI = 8E5
-#NI = 1E6
-#NI = 4E6
 
 # Run MCMC calibration.
 #DAIS_mcmc_output = metrop(log.post, p0, nbatch=NI, scale=step)
@@ -176,29 +173,28 @@ NI = 8E5
 #save.image(file = "Scratch/Workspace/DAIS_calib_MCMC_C1234_realtive.RData")
 
 ############################## RUN ADAPTIVE MCMC #######################################
-# # NOT FULLY CODED YET
-# # load robust adaptive Metropolis
- library(adaptMCMC)
-#
-# # Set optimal acceptance rate as # parameters->infinity (Gelman et al, 1996; Roberts et al, 1997)
- accept.mcmc = 0.234
-#
-# # Set number of iterations, burnin, and rate of adaptation (between 0.5 and 1, lower is faster adaptation)
- gamma.mcmc = 0.5											#
-# burnin = 0.01*NI
-#
-# # Specify when to stop adapting (niter*1 => don't stop) and step size
-# # stopadapt.mcmc = round(niter.mcmc*1.0)
+# load robust adaptive Metropolis
+library(adaptMCMC)
+
+# Set optimal acceptance rate as # parameters->infinity (Gelman et al, 1996; Roberts et al, 1997)
+accept.mcmc = 0.234
+
+# Set number of iterations, burnin, and rate of adaptation (between 0.5 and 1, lower is faster adaptation)
+gamma.mcmc = 0.5
+
+# Specify when to stop adapting (niter*1 => don't stop) and step size
+# stopadapt.mcmc = round(niter.mcmc*1.0)
 step.mcmc = (bound.upper-bound.lower)*.05
 step.mcmc = c(step.mcmc[1:11], 0.05, 1e-8)
-#
-# ## Actually run the calibration.
- amcmc.out1 = MCMC(log.post, NI, p0, scale=step.mcmc, adapt=TRUE, acc.rate=accept.mcmc,gamma=gamma.mcmc, list=TRUE,
+
+# Actually run the calibration.
+amcmc.out1 = MCMC(log.post, NI, p0, scale=step.mcmc, adapt=TRUE, acc.rate=accept.mcmc,gamma=gamma.mcmc, list=TRUE,
                    n.start=round(0.01*NI))
-#
- DAIS_chains = amcmc.out1$samples
+
+DAIS_chains = amcmc.out1$samples
 save.image(file = "DAIS_calib_MCMC_C1234_relative_8e5.RData")
 #save.image(file = "Scratch/Workspace/DAIS_calib_MCMC_C1234_relative2.RData")
+
 ########################## Analysis of the mean of MCMC chains produced  #################
 # Identify the burn-in period and subtract it from the chains.
 burnin = seq(1, 0.04*NI, 1) # 4% burnin
@@ -240,12 +236,6 @@ dais_parameter_PDFs = parameter.pdfs(DAIS_chains_burnin)
 subset_length = 3500
 sub_chain = DAIS_chains_burnin[sample(nrow(DAIS_chains_burnin), size=subset_length, replace=FALSE), ]
 
-#sub_chain = mat.or.vec(subset_length, 12)
-#for(i in 1:12){
-#    sub_chain[,i] = sample(DAIS_chains_burnin[,i], subset_length)
-#}
-
-
 # Check for simularities between full chain and the subset.
 pdf(file="simplecheck_instpaleo.pdf")
 par(mfrow=c(4,4))
@@ -273,6 +263,7 @@ for(i in 1:subset_length) {
 }
 
 ################### HINDCAST AIS CONTRIBUTIONS ##########################
+# (Not Tested)
 # enddate = 240010
 
 # # Loop over the physical model to generate a distribution of model simulations.
@@ -288,15 +279,36 @@ for(i in 1:subset_length) {
 # }
 # 
 # # Estimate bias from the variance
-# bias.mcmc = sqrt(sub_chain[,12]) # standard deviation
+# paleo.bias = sqrt(sub_chain[,12]) # standard deviation
+# inst.bias = sqrt(sub_chain[,13])
 #
-# # Estimate the hindcasts: add the residuals (bias) onto the model simulations. Equations 1 & 2
+# # Paleo to instrumental bias linear regression
+# x.time = c(-5000, -40)
+# t.time = -5000:-40
+#
+# sigma.fit = mat.or.vec(subset_length, length(t.time))
+# for(i in 1:subset_length){
+#     y.bias = c(paleo.bias[i], inst.bias[i])
+#     fit = lm(y.bias ~ x.time)
+#     sigma.fit[i,] = fit$coefficients[1] + t.time*fit$coefficients[2]
+# }
+#
+# residuals.fit = mat.or.vec(subset_length, length(t.time))
+# for(n in 1:subset_length) {
+#     for(i in 1:length(t.time)) {
+#         residuals.fit[n,i] = rnorm(1,mean=0,sd=sigma.fit[n,i])
+#     }
+# }
+#
+# # Estimate the projections: add the residuals (bias) onto the model simulations. Equations 1 & 2
 # # True world = model + bias + error
 # hind.mcmc.1961_1990 = mat.or.vec(subset_length, enddate)
 # for(i in 1:subset_length){
-#   hind.mcmc.1961_1990[i,] = dais_hindcast_anomaly[i,] + rnorm(enddate, mean = 0, sd = bias.mcmc[i])
+#     hind.mcmc.1961_1990[i,1:234999] = dais_hindcast_anomaly[i,1:234999] + rnorm(234999, mean=0, sd=paleo.bias[i])
+#     hind.mcmc.1961_1990[i,235000:239960] = dais_hindcast_anomaly[i,235000:239960] + residuals.fit[i, ]
+#     hind.mcmc.1961_1990[i,239961:enddate] = dais_hindcast_anomaly[i,239961:enddate] + rnorm(length(239961:enddate), mean=0, sd=inst.bias[i])
 # }
-################### PROJECT AIS CONTRIBUTIONS ##########################
+################### HINDCAST & PROJECT AIS CONTRIBUTIONS ##########################
 enddate = 240300
 
 # Loop over the physical model to generate a distribution of model simulations.
@@ -312,8 +324,7 @@ for(i in 1:subset_length){
 }
 
 # Estimate bias from the variance
-#bias.mcmc = sqrt(sub_chain[,12]) # standard deviation
-paleo.bias = sqrt(sub_chain[,12])
+paleo.bias = sqrt(sub_chain[,12]) # standard deviation
 inst.bias = sqrt(sub_chain[,13])
 
 # Paleo to instrumental bias linear regression
@@ -338,7 +349,6 @@ for(n in 1:subset_length) {
 # # True world = model + bias + error
 proj.mcmc.1961_1990 = mat.or.vec(subset_length, enddate)
 for(i in 1:subset_length){
-    #proj.mcmc.1961_1990[i,] = proj.mcmc.anomaly[i,] + rnorm(enddate, mean = 0, sd = bias.mcmc[i])
   proj.mcmc.1961_1990[i,1:234999] = proj.mcmc.anomaly[i,1:234999] + rnorm(234999, mean=0, sd=paleo.bias[i])
   proj.mcmc.1961_1990[i,235000:239960] = proj.mcmc.anomaly[i,235000:239960] + residuals.fit[i, ]
   proj.mcmc.1961_1990[i,239961:enddate] = proj.mcmc.anomaly[i,239961:enddate] + rnorm(length(239961:enddate), mean=0, sd=inst.bias[i])
@@ -364,9 +374,8 @@ d.pos_parameters = sub_chain
 colnames(d.pos_parameters, do.NULL = FALSE)
 colnames(d.pos_parameters) = c("gamma", "alpha", "mu", "nu", "p0", "kappa", "f0", "h0", "c","b0", "slope", "var.paleo", "var.inst")
 
-save.image(file = "DAIS_MCMC_R_C_calibration_relative_8e5.RData")
-#save.image(file = "Scratch/Workspace/DAIS_MCMC_R_C_calibration_relative2.RData")
+save.image(file = "Scratch/Workspace/DAIS_MCMC_R_C_calibration_relative_8e5.RData")
 
 ######################## For Further Analysis Plot graphes ######################
-#source("MCMC_plots.R")
+#source("MCMC_plots_C.R")
 
