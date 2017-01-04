@@ -77,8 +77,6 @@ Additionally, folders for output need to be created otherwise the R with produce
 
 Credits:
     DAIS Model: 
-    Shaffer, G.: Formulation, calibration and validation of the DAIS model (version 1), a simple Antarctic ice sheet
-    model sensitive to variations of sea level and ocean subsurface temperature, Geoscientific Model Development, 7(4),
-    1803–1818, 2014.
+    Shaffer, G.: Formulation, calibration and validation of the DAIS model (version 1), a simple Antarctic ice sheet model sensitive to variations of sea level and ocean subsurface temperature, Geoscientific Model Development, 7(4), 1803–1818, 2014.
 
 
