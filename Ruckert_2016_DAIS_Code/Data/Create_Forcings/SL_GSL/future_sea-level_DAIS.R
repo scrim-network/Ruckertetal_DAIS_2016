@@ -24,6 +24,20 @@
 #
 #       -The SL data in Shaffer (2014) has already adjusted the Church and White 2011 data to
 #       -the present-day (AD 1961-1990) value of zero
+#==============================================================================
+# Copyright 2015 Kelsey Ruckert
+# This file is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This file is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this file.  If not, see <http://www.gnu.org/licenses/>.
 #
 ########################################################################################
 #------------------------------ Clear the global environment -------------------------
@@ -35,7 +49,7 @@ set.seed(1234)
 
 #---------------------------------- Read in the data ---------------------------------
 #Read in temperature and sea level data
-data = read.csv("giss&RCP85tempscenarios.csv", skip=1)
+data = read.csv("giss&RCP85tempscenarios_23_04_2015.csv", skip=1)
 
 #Historical time frame and temperatures from NOAA
 T = data[1:130,7] #temperature data
@@ -51,8 +65,8 @@ rcp85 = data[,10]    #4.284 C in 2100 and 9.849284058 C in 2300
 
 # read in the Church and White 2011 data adjusted to the present-day mean from Shaffer (2014)
 if (!exists('SL')) {
-  SL = scan("future_SL.txt")     #Reconstructed sea-level
-  GSL = scan("future_GSL.txt")   #Time rate of change of sea-level
+  SL = scan("../../future_SL.txt")     #Reconstructed sea-level
+  GSL = scan("../../future_GSL.txt")   #Time rate of change of sea-level
 }
 
 slr <- SL[239880:240009]
@@ -106,6 +120,6 @@ lines(year, GSL[239880:240009], lwd=2)
 futureSeaLevelData = matrix(c(alltime, proj.est$sle, proj.est$slrate),nrow=421,ncol=3)
 colnames(futureSeaLevelData, do.NULL = FALSE)
 colnames(futureSeaLevelData) = c("Year","Sea Level Rise [m] (1961-1990)","Sea Level Rate [m/yr] (1961-1990)")
-write.csv(futureSeaLevelData, file = "FutureRCP85_SLR_for_DAIS_new.csv")
+write.csv(futureSeaLevelData, file = "../Output_Files/FutureRCP85_SLR_for_DAIS_new.csv")
 
 ######################################## END ###############################################
