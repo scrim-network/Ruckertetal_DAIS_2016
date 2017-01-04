@@ -45,12 +45,12 @@ library(adaptMCMC)
 The original Shaffer (2014) scripts are written to run in matlab. For more details on these codes please see the "ReadMeDAIS" file within the "Shaffer_2014_DAIS_Code" folder.
 
 ## Instructions
-* Download the Ruckert_2016_DAIS_Code folder.
+* Download the Ruckert_2017_DAIS_Code folder.
 * Open the `.R` files in R or Rstudio and edit the paths to the files according to your directory structure.
 
-The Ruckert_2016_DAIS_Code directory contains all the scripts and data necessary to run the analysis along with a README file. _(Note that the user may have to edit the scripts according to their folder directory so that the scripts will locate the files/scripts needed to run. Additionally, the following empty folders need to be created before running the analysis: 'Workspace', 'Figures', and 'Converge'. Output will be saved to these folders.)_
+The Ruckert_2016_DAIS_Code directory contains all the scripts and data necessary to run the analysis along with a README file. _(Note that the user may have to edit the scripts according to their folder directory so that the scripts will locate the files/scripts needed to run. Additionally, the user may have to edit the location where the output files are to be saved.)_
 
-Instructions on how to run the scripts can be found in the README file in the Ruckert_2016_DAIS_Code directory. The main files for running the analysis  are the **DAIScali_hetero_model_iid_mcmc_R_C** (MCMC calibration) and **DAIS_precali_LHS_C** (Latin hypercube sampling) files. Note, the MCMC calibration takes ~5.5 hours to complete.
+Instructions on how to run the scripts can be found in the README file in the Ruckert_2017_DAIS_Code directory. The main files for running the analysis  are the **DAIScali_hetero_model_iid_mcmc_R_C** (MCMC calibration) and **DAIS_precali_LHS_C** (Latin hypercube sampling) files. Note, the MCMC calibration takes ~5.5 hours to complete.
 
 ##Contact
 Kelsey Ruckert  
