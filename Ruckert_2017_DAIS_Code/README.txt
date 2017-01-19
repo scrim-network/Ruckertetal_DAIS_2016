@@ -1,7 +1,7 @@
 "Assessing the impact of retreat mechanisms in a simple Antarctic ice sheet model using Bayesian calibration" Codes
 
 Reference:
-Ruckert, KL, Shaffer, G, Pollard, D, Guan, Y, Wong, TE, Forest, CE, and Keller, K. Assessing the impact of retreat mechanisms in a simple Antarctic ice sheet model using Bayesian calibration, (Accepted).
+Ruckert, KL, Shaffer, G, Pollard, D, Guan, Y, Wong, TE, Forest, CE, and Keller, K (2017). Assessing the impact of retreat mechanisms in a simple Antarctic ice sheet model using Bayesian calibration, PLOS ONE 12(1): e0170052. doi: 10.1371/journal.pone.0170052.
 
 Copyright 2016 Kelsey Ruckert (klr324@psu.edu)
 This file is free software: you can redistribute it and/or modify
@@ -35,9 +35,18 @@ Required libraries:
 
 Please note that file locations may need to be edited according to the users structure of the directory.
 Additionally, folders for output need to be created otherwise the R with produce errors.
+The saved workspace used in the paper analysis can be downloaded at this location [link coming soon].
+ =============================================================================
+| Create Output Directories:
+|(NOTE: The directories created here will contain the files outputed from the scripts.)
+|
+|  1. Navigate to the directory with the codes
+|  2. Create Converge directory
+|  3. Create Scratch directory
+ =============================================================================
  =============================================================================
 | How to run LHS analysis:
-|(NOTE:LHS analysis takes ~2hrs to run)
+|(NOTE:LHS analysis takes 2+ hrs to run. This is due to the optimization command and not LHS sampling)
 |
 |  1. Open R
 |  2. Run DAIS_precali_LHS_C.R
@@ -46,7 +55,11 @@ Additionally, folders for output need to be created otherwise the R with produce
 |  3. Run LHS_plots_C.R
  =============================================================================
 | How to run MCMC analysis:
-|(NOTE:MCMC analysis takes a ~5 to 6 hrs to run)
+|(NOTE: MCMC analysis takes a ~5 to 6 hrs to run)
+|(NOTE: The MCMC analysis was run line by line rather than sourcing the script, 
+| therefore the estimates may vary by an extremely small amount because MCMC is a random number generator.  
+| THIS DOES NOT IMPACT THE OVERALL RESULTS AND CONCLUSIONS, especially since MCMC chains converge.
+| The saved workspace used in the paper analysis can be downloaded at this location [link coming soon].)
 |
 |  1. Open R
 |  2. Run DAIScali_hetero_model_iid_mcmc_R_C.R
