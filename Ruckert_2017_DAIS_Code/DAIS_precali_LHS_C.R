@@ -144,7 +144,7 @@ tresult$par[7],tresult$par[8],tresult$par[9],tresult$par[10],tresult$par[11])
 #Project the best fit from the optimized parameters:
 best.project = iceflux(params, project.forcings, standards[1:6])
 #------------------ Save the workspace --------------------------------#
-save.image(file = "Scratch/Workspace/DAIS_precalibration_LHS_relative.RData")
+save.image(file = "Scratch/DAIS_precalibration_LHS_relative_2.RData")
 #----------------------------------------------------------------------#
 
 ############################## Latin Hypercube Sampling ##############################
@@ -255,7 +255,7 @@ dais.1992_2011[i] = dais.pre.cali[i,obs.years[4]] - dais.pre.cali[i,239992]
 }
 
 #------------------ Save the workspace --------------------------------#
-save.image(file = "Scratch/Workspace/DAIS_precalibration_LHS_relative_2.RData")
+save.image(file = "Scratch/DAIS_precalibration_LHS_relative_2.RData")
 
 ############################## Extract values during each observational constrant ##############################
 # Write csv of SLE values for the targeted years -------------------------------------------------------------------
@@ -297,7 +297,7 @@ percent.include = c((sample_length/sample_length)*100, (length(surLIG)/sample_le
                     (length(sur9311trend)/sample_length)*100, (length(sur.all)/sample_length)*100)
 constraints = c("No constraints","Last integlacial","Last glacial maximum","Mid-Holocene","Instrumental period", "All constraints")
 table.parts = matrix(c(constraints, percent.include), nrow=6, ncol=2)
-write.csv(table.parts, file="Scratch/Random_out/constraint_trend_percent_relative1992_2.csv")
+write.csv(table.parts, file="Scratch/constraint_trend_percent_relative1992_2.csv")
 
 #------------------------ WITHOUT the superimposed noise ---------------------------
 surLIG_NN = surviveTarget(windows[1,], surv.targ.nonoise[,1])
@@ -324,7 +324,7 @@ percent.include = c((sample_length/sample_length)*100, (length(surLIG_NN)/sample
                     (length(surLGM_NN)/sample_length)*100, (length(surMH_NN)/sample_length)*100, 
                     (length(sur9311trend_NN)/sample_length)*100, (length(sur.all_NN)/sample_length)*100)
 table.parts.nonoise = matrix(c(constraints, percent.include), nrow=6, ncol=2)
-write.csv(table.parts.nonoise, file="Scratch/Random_out/NoNoise_constraint_trend_percent_relative1992_2.csv")
+write.csv(table.parts.nonoise, file="Scratch/NoNoise_constraint_trend_percent_relative1992_2.csv")
 
 #--------------------- Parameter Pairsplot ------------------------------------
 # Find the parameters that fit each of the constraints
@@ -413,7 +413,7 @@ present.sf2300 <- plot.sf(present.prob_proj[,7], make.plot=F); all.sf2300 <- plo
 #LIGtrend.sflgm <- plot.sf(LIG.trend.prob_proj[,2], make.plot=F)
 
 #------------------ Save the workspace --------------------------------#
-save.image(file = "Scratch/Workspace/DAIS_precalibration_LHS_relative_2.RData")
+save.image(file = "Scratch/DAIS_precalibration_LHS_relative_2.RData")
 #----------------------------------------------- END ------------------------------------------------------------#
 
 
