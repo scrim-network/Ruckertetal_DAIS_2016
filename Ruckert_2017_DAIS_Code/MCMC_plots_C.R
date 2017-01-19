@@ -24,7 +24,7 @@
 ###################################################################################################
 
 # Load in the saved workspace from MCMC calibration
-load("Scratch/Workspace/DAIS_MCMC_R_C_calibration_relative_8e5.RData")
+load("Scratch/DAIS_MCMC_R_C_calibration_relative_8e5.RData")
 
 # Install and open packages:
 #install.packages('ash')
@@ -213,7 +213,7 @@ mean_RHF = mean_RHF + rnorm(length(mean_RHF), mean=0, sd=mean(paleo.bias))
 ###################################### MAIN FIGURES ############################################
 #------------------------------------- Figure 1 -------------------------------------------
 #pdf(file="Figures/SuppFigures/Ruckertetal_daisRHF_Sfig2a.pdf", family="Helvetica", height=5.4, width=6.7,pointsize=11)
-png(file="Scratch/Figures/Fig1_C_instPaleo.tif", family="Helvetica", width=6,
+png(file="Scratch/Fig1_C_instPaleo.tif", family="Helvetica", width=6,
     height=6, units="in",pointsize=12, res=300)
 par(mfrow=c(2,2),mgp=c(1.5,.5,0), mar=c(3.5,4,1,1)) # set figure dimensions
 
@@ -254,7 +254,7 @@ dev.off()
 
 #------------------------------------- Figure 2 -------------------------------------------
 # MCMC hindcasts & projection
-png(file="Scratch/Figures/Fig2_C_instPaleo.tif", family="Helvetica", width=text_column_width,
+png(file="Scratch/Fig2_C_instPaleo.tif", family="Helvetica", width=text_column_width,
     height=single_panel_height*2, units="in",pointsize=12, res=300)
 # pdf(file="Figures/Ruckertetal_dais90MCMC_Fig1.pdf", family="Helvetica", width=6.7, height=8.1, pointsize=12)
 par(mfrow=c(3,2), mgp=c(1.5,.5,0), mar=c(4, 4, 2, 1))
@@ -411,7 +411,7 @@ dev.off()
 round(mcmc_mean[240100],2)
 round(mcmc_std[240100],2)
 
-png(file="Scratch/Figures/Fig4_C_instPaleo.tif", family="Helvetica", units="in", width=text_column_width, height=single_panel_height, pointsize=11, res=300)
+png(file="Scratch/Fig4_C_instPaleo.tif", family="Helvetica", units="in", width=text_column_width, height=single_panel_height, pointsize=11, res=300)
 par(mfrow=c(1,1), mgp=c(1.5,.5,0),mar=c(4, 4, 2, 1))
 
 plot(date[240000], proj.mcmc.1961_1990[1,240000], type="l", col="powderblue", lwd=2,
@@ -471,7 +471,7 @@ dev.off()
 #png(file="Scratch/Figures/SuppFigures/SFig3_C_instPaleo.tif", family="Helvetica", width=text_column_width,
 #    height=6, units="in",pointsize=16, res=300)
 #png(file="Scratch/Figures/SuppFigures/SFig3_C_instPaleo.tif", family="Helvetica", pointsize=12, res=300)
-pdf(file="Scratch/Figures/SuppFigures/Marginalpdf_SF.pdf", family="Helvetica", pointsize=16)
+pdf(file="Scratch/Marginalpdf_SF.pdf", family="Helvetica", pointsize=16)
 par(mfrow=c(4,4),mgp=c(1.5,.5,0), mar=c(3.5,4,1,1))
 
 plot(density(DAIS_chains_burnin[,1]), main="", ylab = "PDF", xlab=expression(gamma), yaxt="n", xlim = c(bound.lower[1], bound.upper[1]))
@@ -516,7 +516,7 @@ pairs.image <- function(x) {
 #colnames(d.pos_parameters) = c(expression(gamma),expression(alpha), expression(mu), expression(nu),
 #                               "Po", expression(kappa), "fo", "ho", "co","bo", "s", expression(sigma^2))
 
-pdf(file="Scratch/Figures/SuppFigures/SFig4_C_instPaleo.pdf", family="Helvetica", pointsize=12)
+pdf(file="Scratch/SFig4_C_instPaleo.pdf", family="Helvetica", pointsize=12)
 #png(file="Figures/SuppFig5_dais_mcmc.tif", family="Helvetica",pointsize=12, res=300)
 pairs.image(d.pos_parameters)
 par(fig = c(.5, 1, .5, 1), new=TRUE)
@@ -557,7 +557,7 @@ percent.include = c((subset_length/subset_length)*100, (length(surLIG)/subset_le
 print(percent.include)
 constraints = c("No constraints","Last integlacial","Last glacial maximum","Mid-Holocene","Instrumental period","All constraints")
 table.parts = matrix(c(constraints, percent.include), nrow=6, ncol=2)
-write.csv(table.parts, file="Scratch/Random_out/constraint_percent_MCMC_instPaleo.csv")
+write.csv(table.parts, file="Scratch/constraint_percent_MCMC_instPaleo.csv")
 #---------- NO NOISE
 surv.targ = matrix(c(proj.mcmc.anomaly[1:subset_length,120000], proj.mcmc.anomaly[1:subset_length,220000],proj.mcmc.anomaly[1:subset_length,234000], 
                      proj.mcmc.anomaly[1:subset_length,240002]), nrow=subset_length, ncol=4)
@@ -578,7 +578,7 @@ percent.include = c((subset_length/subset_length)*100, (length(surLIG)/subset_le
                     (length(sur9311trend)/subset_length)*100, (length(sur.all)/subset_length)*100)
 print(percent.include)
 table.parts.nonoise = matrix(c(constraints, percent.include), nrow=6, ncol=2)
-write.csv(table.parts.nonoise, file="Scratch/Random_out/NoNoise_constraint_percent_MCMC_instPaleo.csv")
+write.csv(table.parts.nonoise, file="Scratch/NoNoise_constraint_percent_MCMC_instPaleo.csv")
 
 #------------------------------------- Figure 3 -------------------------------------------
 # Function to find SLE values in certain years 'fn.prob.proj'
@@ -593,7 +593,7 @@ NN_2100.mcmc <- plot.sf(NN_mcmc.prob_proj[,6], make.plot=F) # 2100
 NN_2002.mcmc <- plot.sf(dais.1992_2011.NN, make.plot=F) # without noise
 sf.2002.mcmc <- plot.sf(dais.1992_2011, make.plot=F) # with added noise
 
-png(file="Scratch/Figures/Fig3_C_newinstPaleo2.tif", family="Helvetica", width=text_column_width,
+png(file="Scratch/Fig3_C_newinstPaleo2.tif", family="Helvetica", width=text_column_width,
 height=single_panel_height*2, units="in",pointsize=12, res=300)
 par(mfrow=c(3,2), mgp=c(1.5,.5,0), mar=c(4, 4, 2, 1))
 
