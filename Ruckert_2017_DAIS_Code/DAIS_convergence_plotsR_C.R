@@ -29,7 +29,7 @@ library(coda)
 
 ################################## CONVERGENCE ####################################
 # Test for MCMC chain (1234) convergence:
-load("DAIS_calib_MCMC_C1234_relative_8e5.RData")
+load("Scratch/DAIS_calib_MCMC_C1234_relative_8e5.RData")
 
 NI = length(DAIS_chains[,1])
 burnin.length = (NI*0.04)+1
@@ -42,7 +42,7 @@ NI = length(results[,1])
 heidel.diag(results, eps=0.1, pvalue=0.05)
 
 # Test for MCMC chain (1780) convergence:
-load("Scratch/Workspace/DAIS_calib_MCMC_C1780_relative__8e5.RData") # seed 1780
+load("Scratch/DAIS_calib_MCMC_C1780_relative__8e5.RData") # seed 1780
 
 NI = length(DAIS_chains1780[,1])
 results_1780 = DAIS_chains1780[burnin.length:NI,]
@@ -54,7 +54,7 @@ heidel.diag(results_1780, eps=0.1, pvalue=0.05)
 
 ## ============ TEST 3rd seed (Not used in the analysis for the paper) ============
 # Test for MCMC chain (1) convergence:
-# load("Scratch/Workspace/DAIS_calib_MCMC_C1.RData") # seed 1
+# load("Scratch/DAIS_calib_MCMC_C1.RData") # seed 1
 
 # NI = length(DAIS_chains1780[,1])
 # results_1 = DAIS_chains1780[burnin.length:NI,]
