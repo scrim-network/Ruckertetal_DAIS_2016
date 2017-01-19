@@ -582,10 +582,16 @@ write.csv(table.parts.nonoise, file="Scratch/Random_out/NoNoise_constraint_perce
 
 #------------------------------------- Figure 3 -------------------------------------------
 # Function to find SLE values in certain years 'fn.prob.proj'
-# Calculate the pdf, cdf, and sf of AIS melt estimates in:
+# Calculate the pdf, cdf, and sf of AIS melt estimates (without noise) in:
 NN_mcmc.prob_proj <- fn.prob.proj(proj.mcmc.anomaly, year.pcs, subset_length, un.constr=T)
 NN_LIG.mcmc <- plot.sf(NN_mcmc.prob_proj[,1], make.plot=F) # 120,000 BP (Last interglacial)
+NN_LGM.mcmc <- plot.sf(NN_mcmc.prob_proj[,2], make.plot=F)
+NN_MH.mcmc <- plot.sf(NN_mcmc.prob_proj[,3], make.plot=F)
 NN_2100.mcmc <- plot.sf(NN_mcmc.prob_proj[,6], make.plot=F) # 2100
+
+# Make relative to 1992:
+NN_2002.mcmc <- plot.sf(dais.1992_2011.NN, make.plot=F) # without noise
+sf.2002.mcmc <- plot.sf(dais.1992_2011, make.plot=F) # with added noise
 
 png(file="Scratch/Figures/Fig3_C_newinstPaleo2.tif", family="Helvetica", width=text_column_width,
 height=single_panel_height*2, units="in",pointsize=12, res=300)
