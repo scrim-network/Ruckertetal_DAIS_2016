@@ -24,7 +24,7 @@
 ###################################################################################################
 
 # Load in the saved workspace from LHS precalibration
-load("Scratch/Workspace/DAIS_precalibration_LHS_relative_2.RData")
+load("Scratch/DAIS_precalibration_LHS_relative_2.RData")
 
 # Install and open packages:
 #install.packages('ash')
@@ -122,7 +122,7 @@ print(paste('median rmse = ', rmse_median))
 #------------------------------------- Supplementary Figure 2 -------------------------------------------
 
 #pdf(file="Figures/SuppFigures/suppFig4_dais_LHS.pdf", family="Helvetica",height=5.4, width=6.7,pointsize=11)
-png(file="Scratch/Figures/SuppFigures/S2_Fig_inst2_2.tif", family="Helvetica", width=text_column_width,
+png(file="Scratch/S2_Fig_inst2_2.tif", family="Helvetica", width=text_column_width,
 height=single_panel_height*2, units="in",pointsize=12, res=300)
 par(mfrow=c(2,1),mgp=c(1.5,.5,0), mar=c(3.5,4,1,2)) # set figure dimensions
 
@@ -257,7 +257,7 @@ dev.off()
 #------------------------------------- Supplementary Figure 1 -------------------------------------------
 # # LHS hindcasts & projection
 # width=1920, height=1080
-png(file="Scratch/Figures/SuppFigures/S1_Fig_inst2.tif", family="Helvetica", width=text_column_width, height=single_panel_height*2, units="in",pointsize=12, res=300)
+png(file="Scratch/S1_Fig_inst2.tif", family="Helvetica", width=text_column_width, height=single_panel_height*2, units="in",pointsize=12, res=300)
 par(mfrow=c(3,2), mgp=c(1.5,.5,0), mar=c(4, 4, 2, 1))
 # jpeg(file="nSuppFig3_dais_mcmcLHS.jpeg", family="Helvetica", width=1590, height=1920, units="px", pointsize=40)
 # par(mfrow=c(3,2), mgp=c(1.5,.5,0),mar=c(4, 4, 3, 2))
