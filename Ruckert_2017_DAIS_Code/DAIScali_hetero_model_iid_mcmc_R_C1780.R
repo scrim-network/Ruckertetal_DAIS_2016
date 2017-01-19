@@ -190,7 +190,7 @@ DAIS_mcmc_output1780 = MCMC(log.post, NI, p0, scale=step.mcmc, adapt=TRUE, acc.r
 DAIS_chains1780 = DAIS_mcmc_output1780$samples
 
 ## Save workspace image - you do not want to re-simulate all those!
-save.image(file = "DAIS_calib_MCMC_C1780_relative__8e5.RData")
+save.image(file = "Scratch/DAIS_calib_MCMC_C1780_relative__8e5.RData")
 
 ########################################## END ########################################
 
