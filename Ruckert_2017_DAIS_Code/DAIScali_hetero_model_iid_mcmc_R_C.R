@@ -192,7 +192,7 @@ amcmc.out1 = MCMC(log.post, NI, p0, scale=step.mcmc, adapt=TRUE, acc.rate=accept
                    n.start=round(0.01*NI))
 
 DAIS_chains = amcmc.out1$samples
-save.image(file = "DAIS_calib_MCMC_C1234_relative_8e5.RData")
+save.image(file = "Scratch/DAIS_calib_MCMC_C1234_relative_8e5.RData")
 #save.image(file = "Scratch/Workspace/DAIS_calib_MCMC_C1234_relative2.RData")
 
 ########################## Analysis of the mean of MCMC chains produced  #################
@@ -237,7 +237,7 @@ subset_length = 3500
 sub_chain = DAIS_chains_burnin[sample(nrow(DAIS_chains_burnin), size=subset_length, replace=FALSE), ]
 
 # Check for simularities between full chain and the subset.
-pdf(file="simplecheck_instpaleo.pdf")
+pdf(file="Scratch/simplecheck_instpaleo.pdf")
 par(mfrow=c(4,4))
 for(i in 1:13){
   plot(density(DAIS_chains_burnin[ ,i]), type="l",
@@ -374,7 +374,7 @@ d.pos_parameters = sub_chain
 colnames(d.pos_parameters, do.NULL = FALSE)
 colnames(d.pos_parameters) = c("gamma", "alpha", "mu", "nu", "p0", "kappa", "f0", "h0", "c","b0", "slope", "var.paleo", "var.inst")
 
-save.image(file = "Scratch/Workspace/DAIS_MCMC_R_C_calibration_relative_8e5.RData")
+save.image(file = "Scratch/DAIS_MCMC_R_C_calibration_relative_8e5.RData")
 
 ######################## For Further Analysis Plot graphes ######################
 #source("MCMC_plots_C.R")
