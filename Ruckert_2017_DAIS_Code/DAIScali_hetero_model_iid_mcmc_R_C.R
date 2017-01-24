@@ -36,6 +36,9 @@ enableJIT(3)
 library(mcmc)
 
 # Set the seed.
+# NOTE: This seed may differ from the seed used in the analysis used in the paper, since the code was run line by line 
+# rather than sourced.
+# The workspace and outputs used in the paper can be downloaded at: https://download.scrim.psu.edu/Ruckert_etal_DAIS/
 set.seed(1234)
 
 # Read in hindcast/ forcing data, read in standard values, and read in AIS dates both specific and ranges so there is no use of magic numbers.
