@@ -57,10 +57,11 @@ https://download.scrim.psu.edu/Ruckert_etal_DAIS/.
  =============================================================================
 | How to run MCMC analysis:
 |(NOTE: MCMC analysis takes a ~5 to 6 hrs to run)
-|(NOTE: The MCMC analysis was run line by line rather than sourcing the script so the seed is likely different. 
-| Therefore the estimates may vary by an extremely small amount because MCMC is a random number generator and   
-| the chains are converged. THIS DOES NOT IMPACT THE OVERALL RESULTS AND CONCLUSIONS. The saved workspace used 
-| in the paper analysis can be downloaded at this location: https://download.scrim.psu.edu/Ruckert_etal_DAIS/.)
+|(NOTE: The MCMC analysis was run line by line rather than sourcing the script so the seed is likely  
+| different. Therefore the estimates may vary by an extremely small amount because MCMC is a random    
+| number generator and the chains are converged. THIS DOES NOT IMPACT THE OVERALL RESULTS AND  
+| CONCLUSIONS. The saved workspace used in the paper analysis can be downloaded at this location:
+| https://download.scrim.psu.edu/Ruckert_etal_DAIS/.)
 |
 |  1. Open R
 |  2. Run DAIScali_hetero_model_iid_mcmc_R_C.R
