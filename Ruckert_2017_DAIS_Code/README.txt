@@ -35,7 +35,7 @@ Required libraries:
 
 Please note that file locations may need to be edited according to the users structure of the directory.
 Additionally, folders for output need to be created otherwise the R with produce errors.
-The saved workspace used in the paper analysis can be downloaded at this location [link coming soon].
+The saved workspace used in the paper analysis can be downloaded at this location: https://download.scrim.psu.edu/Ruckert_etal_DAIS/.
  =============================================================================
 | Create Output Directories:
 |(NOTE: The directories created here will contain the files outputed from the scripts.)
@@ -59,7 +59,7 @@ The saved workspace used in the paper analysis can be downloaded at this locatio
 |(NOTE: The MCMC analysis was run line by line rather than sourcing the script, 
 | therefore the estimates may vary by an extremely small amount because MCMC is a random number generator.  
 | THIS DOES NOT IMPACT THE OVERALL RESULTS AND CONCLUSIONS, especially since MCMC chains converge.
-| The saved workspace used in the paper analysis can be downloaded at this location [link coming soon].)
+| The saved workspace used in the paper analysis can be downloaded at this location: https://download.scrim.psu.edu/Ruckert_etal_DAIS/.)
 |
 |  1. Open R
 |  2. Run DAIScali_hetero_model_iid_mcmc_R_C.R
