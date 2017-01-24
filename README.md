@@ -1,10 +1,10 @@
-#Sea-level contribution from the Antarctic Ice Sheet code and pre-run files for Ruckert et al. (2017)
+#Sea-level contribution from the Antarctic Ice Sheet code and <a href="https://download.scrim.psu.edu/Ruckert_etal_DAIS/" target="_blank">pre-run</a> files for Ruckert et al. (2017)
 
 README file last updated by Kelsey Ruckert, klr324-at-psu-dot-edu, Wed Jan 4 2017.
 
 ##Citation
 
-This code and pre-run data analysis are intended to accompany the results of
+This code and <a href="https://download.scrim.psu.edu/Ruckert_etal_DAIS/" target="_blank">pre-run data analysis</a> are intended to accompany the results of:
 
 >Ruckert, KL, Shaffer, G, Pollard, D, Guan, Y, Wong, TE, Forest, CE and Keller, K (2017). Assessing the impact of retreat mechanisms in a simple Antarctic ice sheet model using Bayesian calibration, PLoS ONE 12(1): e0170052. doi: <a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0170052" target="_blank">10.1371/journal.pone.0170052</a>.
 
@@ -22,7 +22,7 @@ This R code is intended to help users who wish to work with the sea-level projec
 3. Produces plots from the paper
 
 The pre-run analysis is also provided for those who do not want to run the codes (which take multiple hours to run) and wish to use the results from the paper.
-**The saved workspace used in the paper analysis can be downloaded at this location [link coming soon].**
+**The saved workspace used in the paper analysis can be downloaded at this location: <a href="https://download.scrim.psu.edu/Ruckert_etal_DAIS/" target="_blank">https://download.scrim.psu.edu/Ruckert_etal_DAIS/</a>.** This download server also includes the illustration from Figure 1a and 1b since it is not created via code.
 
 ## Requirements
 ### Software
