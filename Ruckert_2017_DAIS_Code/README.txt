@@ -47,7 +47,8 @@ https://download.scrim.psu.edu/Ruckert_etal_DAIS/.
  =============================================================================
  =============================================================================
 | How to run LHS analysis:
-|(NOTE:LHS analysis takes 2+ hrs to run. This is due to the optimization command and not LHS sampling)
+|(NOTE:LHS analysis takes 2+ hrs to run. This is due to the optimization command and not LHS
+| sampling)
 |
 |  1. Open R
 |  2. Run DAIS_precali_LHS_C.R
@@ -57,12 +58,13 @@ https://download.scrim.psu.edu/Ruckert_etal_DAIS/.
  =============================================================================
 | How to run MCMC analysis:
 |(NOTE: MCMC analysis takes a ~5 to 6 hrs to run)
-|(NOTE: The seed was not set for the MCMC analysis used in the paper. Even though the chains are converged, 
-| estimates may vary ever so slightly because MCMC is a random number generator. This does not impact    
-| the overall results and conclusions. The seeds 1234 and 1780 should yield the same distributions and figures.
+|(NOTE: The seed was not set for the MCMC analysis used in the paper. Even though the chains are  
+| converged, estimates may vary ever so slightly because MCMC is a random number generator. This     
+| does not impact the overall results and conclusions. The seeds 1234 and 1780 should yield the 
+| same distributions and figures.
 |
-| If you wish to use the exact workspace/files used in the paper analysis, then they can be downloaded at 
-| this location: https://download.scrim.psu.edu/Ruckert_etal_DAIS/.)
+| If you wish to use the exact workspace/files used in the paper analysis, then they can be  
+| downloaded at this location: https://download.scrim.psu.edu/Ruckert_etal_DAIS/.)
 |
 |  1. Open R
 |  2. Run DAIScali_hetero_model_iid_mcmc_R_C.R
