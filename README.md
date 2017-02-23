@@ -1,4 +1,4 @@
-#Sea-level contribution from the Antarctic Ice Sheet code and <a href="https://download.scrim.psu.edu/Ruckert_etal_DAIS/" target="_blank">pre-run</a> files for Ruckert et al. (2017)
+#Code and <a href="https://download.scrim.psu.edu/Ruckert_etal_DAIS/" target="_blank">pre-run</a> files for "Assessing the impact of retreat mechanisms in a simple Antarctic ice sheet model using Bayesian calibration"
 
 README file last updated by Kelsey Ruckert, klr324-at-psu-dot-edu, Wed Jan 4 2017.
 
