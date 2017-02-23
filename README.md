@@ -21,7 +21,7 @@ This R code is intended to help users who wish to work with the sea-level projec
 2. How to calibrate the model to data constraints with heteroskedastic errors using Markov chain Monte Carlo
 3. Produces plots from the paper
 
-The pre-run analysis is also provided for those who do not want to run the codes (which take multiple hours to run) and wish to use the results from the paper.
+The pre-run analysis is also provided for those who do not want to run the codes (which take multiple hours to run; roughly half a day) and wish to use the results from the paper.
 **The saved workspace used in the paper analysis can be downloaded at this location: <a href="https://download.scrim.psu.edu/Ruckert_etal_DAIS/" target="_blank">https://download.scrim.psu.edu/Ruckert_etal_DAIS/</a>.** This download server also includes the illustration from Figure 1a and 1b since it is not created via code.
 
 ## Requirements
@@ -54,7 +54,7 @@ The original Shaffer (2014) scripts are written to run in matlab. For more detai
 
 The Ruckert_2016_DAIS_Code directory contains all the scripts and data necessary to run the analysis along with a README file. _(Note that the user may have to edit the scripts according to their folder directory so that the scripts will locate the files/scripts needed to run. Additionally, the user will have to create directories named **Converge** and **Scratch**. The script will output files into these directories.)_
 
-Instructions on how to run the scripts can be found in the README file in the Ruckert_2017_DAIS_Code directory. The main files for running the analysis  are the **DAIScali_hetero_model_iid_mcmc_R_C** (MCMC calibration) and **DAIS_precali_LHS_C** (Latin hypercube sampling) files. Note, the MCMC calibration and the optimization proccess in the LHS script take multiple hours to complete.
+Instructions on how to run the scripts can be found in the README file in the Ruckert_2017_DAIS_Code directory. The main files for running the analysis  are the **DAIScali_hetero_model_iid_mcmc_R_C** (MCMC calibration) and **DAIS_precali_LHS_C** (Latin hypercube sampling) files. Note, the MCMC calibration (~6 hrs) and the optimization proccess in the LHS script (~2hrs) take multiple hours to complete.
 
 ##Contact
 Kelsey Ruckert  
