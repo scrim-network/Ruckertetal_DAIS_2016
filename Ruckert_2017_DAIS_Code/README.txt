@@ -35,7 +35,7 @@ Required libraries:
 
 Please note that file locations may need to be edited according to the users structure of the directory.
 Additionally, folders for output need to be created otherwise the R with produce errors.
-The saved workspace used in the paper analysis can be downloaded at this location: 
+The saved workspace/files used in the paper analysis can be downloaded at this location: 
 https://download.scrim.psu.edu/Ruckert_etal_DAIS/.
  =============================================================================
 | Create Output Directories:
@@ -57,11 +57,12 @@ https://download.scrim.psu.edu/Ruckert_etal_DAIS/.
  =============================================================================
 | How to run MCMC analysis:
 |(NOTE: MCMC analysis takes a ~5 to 6 hrs to run)
-|(NOTE: The MCMC analysis was run line by line rather than sourcing the script so the seed is likely  
-| different. Therefore the estimates may vary by an extremely small amount because MCMC is a random    
-| number generator and the chains are converged. THIS DOES NOT IMPACT THE OVERALL RESULTS AND  
-| CONCLUSIONS. The saved workspace used in the paper analysis can be downloaded at this location:
-| https://download.scrim.psu.edu/Ruckert_etal_DAIS/.)
+|(NOTE: The seed was not set for the MCMC analysis used in the paper. Even though the chains are converged, 
+| estimates may vary ever so slightly because MCMC is a random number generator. This does not impact    
+| the overall results and conclusions. The seeds 1234 and 1780 should yield the same distributions and figures.
+|
+| If you wish to use the exact workspace/files used in the paper analysis, then they can be downloaded at 
+| this location: https://download.scrim.psu.edu/Ruckert_etal_DAIS/.)
 |
 |  1. Open R
 |  2. Run DAIScali_hetero_model_iid_mcmc_R_C.R
@@ -94,4 +95,6 @@ Credits:
     DAIS Model: 
 Shaffer, G.: Formulation, calibration and validation of the DAIS model (version 1), a simple Antarctic ice sheet model sensitive to variations of sea level and ocean subsurface temperature, Geoscientific Model Development, 7(4), 1803–1818, 2014.
 
+Please enjoy the code and offer us any and all of your suggestions. Thanks!
+Kelsey Ruckert (klr324@psu.edu)
 
